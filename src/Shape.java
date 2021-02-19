@@ -160,14 +160,14 @@ public class Shape {
 
         Shape before = root;
         Shape after = root.rotateCounterclockwise();
-        while (true) {
+
+        do {
             before.next = after;
             before = after;
             after = before.rotateCounterclockwise();
-            if (after.equals(root)) {
-                return root;
-            }
-        }
+        } while (!after.equals(root));
+
+        return root;
     }
 
 

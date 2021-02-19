@@ -91,7 +91,6 @@ public class ShapeTest {
         assertNotEquals(t, l);
         assertNotEquals(t, l1);
 
-
 //        assertEquals(o, o);
 //        assertNotEquals(o, l);
 //        assertNotEquals(j, l);
@@ -109,10 +108,15 @@ public class ShapeTest {
         Shape t3 = t2.rotateCounterclockwise();
         Shape t4 = t3.rotateCounterclockwise();
 
-        assertNotEquals(t1, t);
-        assertNotEquals(t1, t2);
+        assertNotEquals(t, t1);
         assertNotEquals(t, t2);
+        assertNotEquals(t, t3);
         assertEquals(t, t4);
+
+        assertNotEquals(t1, t2);
+        assertNotEquals(t2, t3);
+        assertNotEquals(t3, t4);
+
 
 //        Shape o1 = o.rotateCounterclockwise();
 //        Shape o2 = o1.rotateCounterclockwise();
