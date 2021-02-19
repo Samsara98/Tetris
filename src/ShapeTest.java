@@ -78,15 +78,18 @@ public class ShapeTest {
         Shape l = new Shape(Shape.L_STR);
         Shape l1 = new Shape("0 0  0 1  0 2  1 0");
         Shape t1 = new Shape("0 0  1 0  1 1  2 0");
-        Shape t2 = new Shape(t.getPoints());
+        Shape t2 = new Shape("0 0  1 1  1 0  2 0");
+        Shape t3 = new Shape(t.getPoints());
 
         assertEquals(t, t);
         assertEquals(t, t1);
         assertEquals(t, t2);
+        assertEquals(t, t3);
         assertEquals(t1, t2);
+        assertEquals(t1, t3);
         assertEquals(l, l1);
         assertNotEquals(t, l);
-
+        assertNotEquals(t, l1);
 
 
 //        assertEquals(o, o);
