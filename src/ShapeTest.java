@@ -15,8 +15,10 @@ public class ShapeTest {
 //    private Shape z;
 //    private Shape o;
 
+
     @Before
     public void setUp() {
+
         t = new Shape(Shape.T_STR);
 //        t2 = new Shape(Shape.T_STR);
 //        i = new Shape(Shape.I_STR);
@@ -26,6 +28,7 @@ public class ShapeTest {
 //        z = new Shape(Shape.Z_STR);
 //        o = new Shape(Shape.O_STR);
     }
+
 
     @Test(timeout = 100)
     public void stupidTest() {
@@ -39,13 +42,17 @@ public class ShapeTest {
 
     }
 
+
     @Test(timeout = 100)
-    public void shapeTest(){
-        Shape shape1 = new Shape("0 0  1 0  1 1  2 0");
-        Shape shape2 = new Shape(t.getPoints());
-        assertEquals(shape1,t);
-        assertEquals(shape2,t);
-        assertEquals(shape1,shape2);
+    public void shapeTest() {
+        Shape l = new Shape("0 0  1 0  1 1  2 0");
+        Point[] points = l.getPoints();
+        assertTrue(Arrays.asList(points).contains(new Point(1, 0)));
+        assertTrue(Arrays.asList(points).contains(new Point(0, 0)));
+        assertTrue(Arrays.asList(points).contains(new Point(1, 1)));
+        assertTrue(Arrays.asList(points).contains(new Point(2, 0)));
+
+
 
 //        assertEquals(1, i.getWidth());
 //        assertEquals(2, l.getWidth());
@@ -64,11 +71,24 @@ public class ShapeTest {
         assertEquals(2, t.getHeight());
     }
 
+
     @Test(timeout = 100)
-    public void equalsTest(){
+    public void equalsTest() {
+
         Shape l = new Shape(Shape.L_STR);
+        Shape l1 = new Shape("0 0  0 1  0 2  1 0");
+        Shape t1 = new Shape("0 0  1 0  1 1  2 0");
+        Shape t2 = new Shape(t.getPoints());
+
         assertEquals(t, t);
-        assertNotEquals(t,l);
+        assertEquals(t, t1);
+        assertEquals(t, t2);
+        assertEquals(t1, t2);
+        assertEquals(l, l1);
+        assertNotEquals(t, l);
+
+
+
 //        assertEquals(o, o);
 //        assertNotEquals(o, l);
 //        assertNotEquals(j, l);
@@ -77,14 +97,19 @@ public class ShapeTest {
 //        assertNotEquals(z, s);
     }
 
+
     @Test(timeout = 100)
-    public void rotateCounterclockwiseTest(){
+    public void rotateCounterclockwiseTest() {
+
         Shape t1 = t.rotateCounterclockwise();
         Shape t2 = t1.rotateCounterclockwise();
         Shape t3 = t2.rotateCounterclockwise();
         Shape t4 = t3.rotateCounterclockwise();
-        assertNotEquals(t1,t);
-        assertEquals(t,t4);
+
+        assertNotEquals(t1, t);
+        assertNotEquals(t1, t2);
+        assertNotEquals(t, t2);
+        assertEquals(t, t4);
 
 //        Shape o1 = o.rotateCounterclockwise();
 //        Shape o2 = o1.rotateCounterclockwise();
@@ -95,14 +120,19 @@ public class ShapeTest {
 //        assertEquals(o2,o3);
     }
 
+
     @Test(timeout = 100)
-    public void makeFastRotationsTest(){
+    public void makeFastRotationsTest() {
+
         Shape[] shapes = Shape.getShapes();
         Shape t1 = shapes[6];
-        assertEquals(t1,t);
+        assertEquals(t1, t);
 
         Shape t2 = t1.fastRotation();
-        Shape t3 = t.rotateCounterclockwise();
-        assertEquals(t2,t3);
+        Shape t3 = t1.rotateCounterclockwise();
+        Shape t4 = t.rotateCounterclockwise();
+        assertEquals(t2, t3);
+        assertEquals(t2, t4);
+
     }
 }
