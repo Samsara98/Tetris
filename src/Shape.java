@@ -105,6 +105,7 @@ public class Shape {
         } else if (!(other instanceof Shape)) {
             return false;
         }
+
         Shape otherPoint = (Shape) other;
         Map<String, Integer> map = new HashMap<>();
         for (Point point : points) {
@@ -156,6 +157,7 @@ public class Shape {
      * 注意：不同形状旋转后的角度数量不一样，例如O型只有一种角度
      */
     private static Shape makeFastRotations(Shape root) {
+
         Shape before = root;
         Shape after = root.rotateCounterclockwise();
         while (true) {

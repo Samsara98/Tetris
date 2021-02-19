@@ -2,6 +2,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.junit.Assert.*;
 
@@ -41,6 +42,12 @@ public class ShapeTest {
 
     @Test
     public void shapeTest(){
+        Shape shape1 = new Shape("0 0  1 0  1 1  2 0");
+        Shape shape2 = new Shape(t.getPoints());
+        assertEquals(shape1,t);
+        assertEquals(shape2,t);
+        assertEquals(shape1,shape2);
+
         assertEquals(1, i.getWidth());
         assertEquals(2, l.getWidth());
         assertEquals(2, j.getWidth());
@@ -66,6 +73,7 @@ public class ShapeTest {
         assertNotEquals(j, l);
         assertNotEquals(i, l);
         assertNotEquals(j, s);
+        assertNotEquals(z, s);
     }
 
     @Test
@@ -79,9 +87,11 @@ public class ShapeTest {
 
         Shape o1 = o.rotateCounterclockwise();
         Shape o2 = o1.rotateCounterclockwise();
+        Shape o3 = o2.rotateCounterclockwise();
         assertEquals(o1,o);
         assertEquals(o2,o);
         assertEquals(o2,o1);
+        assertEquals(o2,o3);
     }
 
     @Test
