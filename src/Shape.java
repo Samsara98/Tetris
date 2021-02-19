@@ -72,15 +72,15 @@ public class Shape {
             before[p.y][p.x] = 1;
         }
 
-        String point = "";
+        StringBuilder point = new StringBuilder();
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 if (before[y][x] == 1) {
-                    point += (height - y - 1) + " " + x + "  ";
+                    point.append(height - y - 1).append(" ").append(x).append("  ");
                 }
             }
         }
-        return new Shape(point);
+        return new Shape(point.toString());
     }
 
 
@@ -190,8 +190,7 @@ public class Shape {
         }
 
         // 为了兼容性，Java里将ArrayList转成Array时必须传入一个同类型的数组做参数
-        Point[] array = points.toArray(new Point[0]);
-        return array;
+        return points.toArray(new Point[0]);
     }
 
 
