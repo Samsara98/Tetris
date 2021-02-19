@@ -27,7 +27,7 @@ public class ShapeTest {
 //        o = new Shape(Shape.O_STR);
     }
 
-    @Test
+    @Test(timeout = 100)
     public void stupidTest() {
         // 形状T
         assertEquals(4, t.getPoints().length);
@@ -39,7 +39,7 @@ public class ShapeTest {
 
     }
 
-    @Test
+    @Test(timeout = 100)
     public void shapeTest(){
         Shape shape1 = new Shape("0 0  1 0  1 1  2 0");
         Shape shape2 = new Shape(t.getPoints());
@@ -64,7 +64,7 @@ public class ShapeTest {
         assertEquals(2, t.getHeight());
     }
 
-    @Test
+    @Test(timeout = 100)
     public void equalsTest(){
         Shape l = new Shape(Shape.L_STR);
         assertEquals(t, t);
@@ -77,7 +77,7 @@ public class ShapeTest {
 //        assertNotEquals(z, s);
     }
 
-    @Test
+    @Test(timeout = 100)
     public void rotateCounterclockwiseTest(){
         Shape t1 = t.rotateCounterclockwise();
         Shape t2 = t1.rotateCounterclockwise();
@@ -95,7 +95,7 @@ public class ShapeTest {
 //        assertEquals(o2,o3);
     }
 
-    @Test
+    @Test(timeout = 100)
     public void makeFastRotationsTest(){
         Shape[] shapes = Shape.getShapes();
         Shape t1 = shapes[6];
