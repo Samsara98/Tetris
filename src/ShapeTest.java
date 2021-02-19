@@ -40,7 +40,7 @@ public class ShapeTest {
     }
 
     @Test
-    public void widthTest(){
+    public void shapeTest(){
         assertEquals(1, i.getWidth());
         assertEquals(2, l.getWidth());
         assertEquals(2, j.getWidth());
@@ -48,10 +48,7 @@ public class ShapeTest {
         assertEquals(3, z.getWidth());
         assertEquals(2, o.getWidth());
         assertEquals(3, t.getWidth());
-    }
 
-    @Test
-    public void heightTest(){
         assertEquals(4, i.getHeight());
         assertEquals(3, l.getHeight());
         assertEquals(3, j.getHeight());
@@ -62,7 +59,7 @@ public class ShapeTest {
     }
 
     @Test
-    public void equalTest(){
+    public void equalsTest(){
         assertEquals(t, t2);
         assertEquals(o, o);
         assertNotEquals(o, l);
@@ -72,7 +69,7 @@ public class ShapeTest {
     }
 
     @Test
-    public void rotateTest(){
+    public void rotateCounterclockwiseTest(){
         Shape t1 = t.rotateCounterclockwise();
         Shape t2 = t1.rotateCounterclockwise();
         Shape t3 = t2.rotateCounterclockwise();
@@ -88,7 +85,7 @@ public class ShapeTest {
     }
 
     @Test
-    public void fastRotationTest(){
+    public void makeFastRotationsTest(){
         Shape[] shapes = Shape.getShapes();
         Shape i1 = shapes[0];
         assertEquals(i1,i);
