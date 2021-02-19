@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**
  * 俄罗斯方块中的一个形状
@@ -18,7 +16,9 @@ public class Shape {
      * 以Point数组作为参数的构造函数
      */
     public Shape(Point[] points) {
-        // TODO
+
+        width = Arrays.stream(points).map(i -> i.x).max(Integer::compareTo).get() + 1;
+        height = Arrays.stream(points).map(i -> i.y).max(Integer::compareTo).get() + 1;
         this.points = points;
     }
 
@@ -28,6 +28,7 @@ public class Shape {
      * 例如"0 0  1 0  0 1  0 2"字符串对应了L形，坐标系的描述参考Point.java
      */
     public Shape(String points) {
+
         this(parsePoints(points));
     }
 
@@ -36,6 +37,7 @@ public class Shape {
      * 形状的宽度，以block为单位
      */
     public int getWidth() {
+
         return width;
     }
 
@@ -44,6 +46,7 @@ public class Shape {
      * 形状的高度，以block为单位
      */
     public int getHeight() {
+
         return height;
     }
 
@@ -53,6 +56,7 @@ public class Shape {
      * 由于数组是引用类型，调用该函数后，不应该对返回的数组继续修改。
      */
     public Point[] getPoints() {
+
         return points;
     }
 
@@ -62,8 +66,21 @@ public class Shape {
      * 注意：该方法不应改变当前形状，而应返回一个新形状
      */
     public Shape rotateCounterclockwise() {
-        // TODO
-        return null;
+
+        int[][] before = new int[height][width];
+        for (Point p : points) {
+            before[p.y][p.x] = 1;
+        }
+
+        String point = "";
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (before[y][x] == 1) {
+                    point += (height - y - 1) + " " + x + "  ";
+                }
+            }
+        }
+        return new Shape(point);
     }
 
 
@@ -72,15 +89,32 @@ public class Shape {
      * 注意：该方法不应改变当前形状，而应返回一个新形状
      */
     public Shape fastRotation() {
+
         return next;
     }
+
 
     /**
      * 检查两个形状是否完全相同。
      * 注意：同一个形状的不同旋转角度，应该返回false。
      */
     public boolean equals(Object other) {
-        // TODO
+
+        if (this == other) {
+            return true;
+        } else if (!(other instanceof Shape)) {
+            return false;
+        }
+        Shape otherPoint = (Shape) other;
+        Map<String, Integer> map = new HashMap<>();
+        for (Point point : points) {
+            map.put(point.toString(), 1);
+        }
+        for (Point point : otherPoint.points) {
+            if (!map.containsKey(point.toString())) {
+                return false;
+            }
+        }
         return true;
     }
 
@@ -93,6 +127,7 @@ public class Shape {
     public static final String Z_STR = "0 1  1 1  1 0  2 0";
     public static final String O_STR = "0 0  0 1  1 0  1 1";
     public static final String T_STR = "0 0  1 0  1 1  2 0";
+
 
     /**
      * 生成所有的形状，放进一个数组里。
@@ -121,8 +156,16 @@ public class Shape {
      * 注意：不同形状旋转后的角度数量不一样，例如O型只有一种角度
      */
     private static Shape makeFastRotations(Shape root) {
-        // TODO
-        return null;
+        Shape before = root;
+        Shape after = root.rotateCounterclockwise();
+        while (true) {
+            before.next = after;
+            before = after;
+            after = before.rotateCounterclockwise();
+            if (after.equals(root)) {
+                return root;
+            }
+        }
     }
 
 
@@ -130,6 +173,7 @@ public class Shape {
      * 从字符串中解析Point数组
      */
     private static Point[] parsePoints(String string) {
+
         List<Point> points = new ArrayList<>();
         StringTokenizer tokenizer = new StringTokenizer(string);
         try {
