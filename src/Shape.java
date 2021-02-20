@@ -115,7 +115,7 @@ public class Shape {
         }
 
         Shape otherPoint = (Shape) other;
-        if (points.length != otherPoint.points.length) {
+        if (points.length != otherPoint.points.length || points.length == 0) {
             return false;
         }
 
@@ -179,9 +179,10 @@ public class Shape {
             after = before.rotateCounterclockwise();
         }
 
-        before.next =root;
+        before.next = root;
         return root;
     }
+
 
     /**
      * 从字符串中解析Point数组

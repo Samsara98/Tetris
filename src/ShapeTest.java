@@ -43,14 +43,19 @@ public class ShapeTest {
     @Test(timeout = 100)
     public void shapeTest() {
 
-        Shape t1 = new Shape("1 0  2 0  1 1  0 0");
+        Shape t1 = new Shape("1 5  2 4  3 3  4 2  1 2  3 2");
+        Shape t2 = new Shape("1 5  2 4  3 3");
         Point[] points = t1.getPoints();
-        assertTrue(Arrays.asList(points).contains(new Point(1, 0)));
-        assertTrue(Arrays.asList(points).contains(new Point(0, 0)));
-        assertTrue(Arrays.asList(points).contains(new Point(1, 1)));
-        assertTrue(Arrays.asList(points).contains(new Point(2, 0)));
-        assertEquals(3, t1.getWidth());
-        assertEquals(2, t1.getHeight());
+        assertTrue(Arrays.asList(points).contains(new Point(1, 5)));
+        assertTrue(Arrays.asList(points).contains(new Point(2, 4)));
+        assertTrue(Arrays.asList(points).contains(new Point(3, 3)));
+        assertTrue(Arrays.asList(points).contains(new Point(4, 2)));
+        assertEquals(5, t1.getWidth());
+        assertEquals(6, t1.getHeight());
+        assertEquals(6, points.length);
+        assertEquals(3, t2.getPoints().length);
+
+
 
         assertEquals(1, i.getWidth());
         assertEquals(2, l.getWidth());
@@ -77,6 +82,8 @@ public class ShapeTest {
         Shape t2 = new Shape("0 0  1 0  1 1  2 0  2 1");
         Shape t3 = new Shape("0 0  1 0  1 1");
         Shape t4 = new Shape(t.getPoints());
+        Shape t5 = new Shape("0 0");
+        Shape t6 = new Shape("0 0  1 0");
 
         assertEquals(t, t);                 // 自反性
         assertNotEquals(t, null);     // x.equals(null)应该返回false
@@ -90,6 +97,10 @@ public class ShapeTest {
         assertNotEquals(t2, t1);
         assertNotEquals(t1, t3);
         assertNotEquals(t3, t1);
+        assertNotEquals(t, t5);
+        assertNotEquals(t5, t);
+        assertNotEquals(t, t6);
+        assertNotEquals(t6, t);
 
 
         assertEquals(o, o);
