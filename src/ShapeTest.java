@@ -120,15 +120,18 @@ public class ShapeTest {
         Shape t2 = t1.rotateCounterclockwise();
         Shape t3 = t2.rotateCounterclockwise();
         Shape t4 = t3.rotateCounterclockwise();
+        Shape t5 = t4.rotateCounterclockwise();
 
         assertNotEquals(t, t1);
         assertNotEquals(t, t2);
         assertNotEquals(t, t3);
         assertEquals(t, t4);
+        assertEquals(t5, t1);
 
         assertNotEquals(t1, t2);
         assertNotEquals(t2, t3);
         assertNotEquals(t3, t4);
+        assertNotEquals(t4, t5);
 
         Point[] points = t1.getPoints();
         assertTrue(Arrays.asList(points).contains(new Point(0, 1)));
@@ -142,6 +145,15 @@ public class ShapeTest {
         assertEquals(o1, o);
         assertEquals(o2, o);
         assertEquals(o3, o);
+
+        Shape diy = new Shape("0 0  1 0  1 1  2 0  2 1");
+        Shape diy2 = diy.rotateCounterclockwise();
+        points = diy2.getPoints();
+        assertTrue(Arrays.asList(points).contains(new Point(0, 1)));
+        assertTrue(Arrays.asList(points).contains(new Point(0, 2)));
+        assertTrue(Arrays.asList(points).contains(new Point(1, 0)));
+        assertTrue(Arrays.asList(points).contains(new Point(1, 1)));
+        assertTrue(Arrays.asList(points).contains(new Point(1, 2)));
     }
 
 
@@ -164,7 +176,7 @@ public class ShapeTest {
         assertNotEquals(t, t2);
         assertNotEquals(t, t3);
         assertNotEquals(t, t4);
-        assertEquals(t, t5);
+
         assertTrue(t1.fastRotation().fastRotation() == t3);
         assertTrue(t1 == t5);
 
