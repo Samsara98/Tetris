@@ -163,6 +163,10 @@ public class ShapeTest {
         assertEquals(o2, o);
         assertEquals(o3, o);
 
+        Shape s1 = s.rotateCounterclockwise();
+        Shape s2 = s1.rotateCounterclockwise();
+        assertEquals(s2, s);
+
         Shape diy = new Shape("0 0  1 0  1 1  2 0  2 1");
         Shape diy2 = diy.rotateCounterclockwise();
         points = diy2.getPoints();
@@ -208,6 +212,11 @@ public class ShapeTest {
         Shape o2 = o1.fastRotation();
         assertEquals(o1, o2);
         assertTrue(o1 == o2);
+
+        Shape s1 = shapes[3];
+        Shape s2 = s1.fastRotation();
+        Shape s3 = s2.fastRotation();
+        assertSame(s1,s3);
 
         Shape l1 = shapes[0];
         Shape l2 = l1.fastRotation();
