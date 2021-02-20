@@ -174,21 +174,14 @@ public class Shape {
         Shape after = root.rotateCounterclockwise();
 
         while (!after.equals(root)) {
-            before.setNext(after);
+            before.next = after;
             before = after;
             after = before.rotateCounterclockwise();
         }
 
-        before.setNext(root);
+        before.next =root;
         return root;
     }
-
-
-    public void setNext(Shape next) {
-
-        this.next = next;
-    }
-
 
     /**
      * 从字符串中解析Point数组

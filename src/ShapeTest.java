@@ -84,12 +84,17 @@ public class ShapeTest {
         Shape t3 = new Shape("0 0  1 1  2 0  1 0  2 1");
         Shape t4 = new Shape(t.getPoints());
 
-        assertEquals(t, t);
-        assertEquals(t, t1);
+        assertEquals(t, t);                 // 自反性
+        assertNotEquals(t, null);     // x.equals(null)应该返回false
+        assertEquals(t, t1);                // 传递性
+        assertEquals(t, t4);
+        assertEquals(t1, t4);
+        assertEquals(t1, t4);               // 一致性
+        assertEquals(t1, t4);
+        assertEquals(t4, t1);               // 对称性
+
         assertNotEquals(t, t2);
         assertNotEquals(t, t3);
-        assertEquals(t, t4);
-
         assertNotEquals(t1, t2);
         assertNotEquals(t2, t1);
         assertNotEquals(t1, t3);
@@ -170,32 +175,32 @@ public class ShapeTest {
         assertEquals(o, o1);
         assertEquals(o1, o2);
         assertEquals(o, o2);
-
-        for (Shape sh : shapes) {
-            printShape(sh,sh);
-        }
+//
+//        for (Shape sh : shapes) {
+//            printShape(sh,sh);
+//        }
 
 
     }
 
 
-    private void printShape(Shape sh,Shape root) {
-
-        int height = sh.getHeight();
-        int width = sh.getWidth();
-        int[][] before = new int[height][width];
-        for (Point p : sh.getPoints()) {
-            before[p.y][p.x] = 1;
-        }
-        for (int y = height - 1; y >= 0; y--) {
-            for (int x = 0; x < width; x++) {
-                System.out.print(before[y][x]);
-            }
-            System.out.println("");
-        }
-        System.out.println("-");
-        if(!sh.fastRotation().equals(root)){
-            printShape(sh.fastRotation(),root);
-        }
-    }
+//    private void printShape(Shape sh,Shape root) {
+//
+//        int height = sh.getHeight();
+//        int width = sh.getWidth();
+//        int[][] before = new int[height][width];
+//        for (Point p : sh.getPoints()) {
+//            before[p.y][p.x] = 1;
+//        }
+//        for (int y = height - 1; y >= 0; y--) {
+//            for (int x = 0; x < width; x++) {
+//                System.out.print(before[y][x]);
+//            }
+//            System.out.println("");
+//        }
+//        System.out.println("-");
+//        if(!sh.fastRotation().equals(root)){
+//            printShape(sh.fastRotation(),root);
+//        }
+//    }
 }
