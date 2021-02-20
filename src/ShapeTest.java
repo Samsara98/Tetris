@@ -1,7 +1,10 @@
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -13,6 +16,7 @@ public class ShapeTest {
     private Shape s;
     private Shape z;
     private Shape o;
+    List<Shape> SHAPES = new ArrayList<>();
 
 
     @Before
@@ -25,6 +29,7 @@ public class ShapeTest {
         s = new Shape(Shape.S_STR);
         z = new Shape(Shape.Z_STR);
         o = new Shape(Shape.O_STR);
+        SHAPES = Arrays.asList(t, i, l, j, s, z, o);
     }
 
 
@@ -36,6 +41,23 @@ public class ShapeTest {
 
         // 形状L
         assertTrue(Arrays.asList(l.getPoints()).contains(new Point(0, 1)));
+
+        Shape myI = new Shape("0 0  0 1  0 2  0 3");
+        Shape myL = new Shape("0 0  0 1  0 2  1 0");
+        Shape myJ = new Shape("0 0  1 0  1 1  1 2");
+        Shape myS = new Shape("0 0  1 0  1 1  2 1");
+        Shape myZ = new Shape("0 1  1 1  1 0  2 0");
+        Shape myO = new Shape("0 0  0 1  1 0  1 1");
+        Shape myT = new Shape("0 0  1 0  1 1  2 0");
+
+        assertEquals(i, myI);
+        assertEquals(l, myL);
+        assertEquals(j, myJ);
+        assertEquals(s, myS);
+        assertEquals(z, myZ);
+        assertEquals(o, myO);
+        assertEquals(t, myT);
+
 
     }
 
@@ -58,7 +80,6 @@ public class ShapeTest {
 
         assertEquals(6, points.length);
         assertEquals(3, t2.getPoints().length);
-
 
 
         assertEquals(1, i.getWidth());
@@ -120,25 +141,20 @@ public class ShapeTest {
     @Test(timeout = 100)
     public void rotateCounterclockwiseTest() {
 
+        for (Shape t : SHAPES) {
+            Shape t1 = t.rotateCounterclockwise();
+            Shape t2 = t1.rotateCounterclockwise();
+            Shape t3 = t2.rotateCounterclockwise();
+            Shape t4 = t3.rotateCounterclockwise();
+            Shape t5 = t4.rotateCounterclockwise();
+
+            assertEquals(t, t4);
+            assertEquals(t5, t1);
+        }
+
         Shape t1 = t.rotateCounterclockwise();
-        Shape t2 = t1.rotateCounterclockwise();
-        Shape t3 = t2.rotateCounterclockwise();
-        Shape t4 = t3.rotateCounterclockwise();
-        Shape t5 = t4.rotateCounterclockwise();
-
-        assertNotEquals(t, t1);
-        assertNotEquals(t, t2);
-        assertNotEquals(t, t3);
-        assertEquals(t, t4);
-        assertEquals(t5, t1);
-
-        assertNotEquals(t1, t2);
-        assertNotEquals(t2, t3);
-        assertNotEquals(t3, t4);
-        assertNotEquals(t4, t5);
-
         Point[] points = t1.getPoints();
-        assertEquals(4,points.length);
+        assertEquals(4, points.length);
         assertTrue(Arrays.asList(points).contains(new Point(0, 1)));
         assertTrue(Arrays.asList(points).contains(new Point(1, 0)));
         assertTrue(Arrays.asList(points).contains(new Point(1, 1)));
@@ -154,7 +170,7 @@ public class ShapeTest {
         Shape diy = new Shape("0 0  1 0  1 1  2 0  2 1");
         Shape diy2 = diy.rotateCounterclockwise();
         points = diy2.getPoints();
-        assertEquals(5,points.length);
+        assertEquals(5, points.length);
         assertTrue(Arrays.asList(points).contains(new Point(0, 1)));
         assertTrue(Arrays.asList(points).contains(new Point(0, 2)));
         assertTrue(Arrays.asList(points).contains(new Point(1, 0)));
@@ -167,6 +183,15 @@ public class ShapeTest {
     public void makeFastRotationsTest() {
 
         Shape[] shapes = Shape.getShapes();
+        for (Shape t : shapes) {
+            Shape t2 = t.fastRotation();
+            Shape t3 = t2.fastRotation();
+            Shape t4 = t3.fastRotation();
+            Shape t5 = t4.fastRotation();
+            assertTrue(t == t5);
+        }
+
+
         Shape t1 = shapes[6];
         assertEquals(t1, t);
 
@@ -182,9 +207,6 @@ public class ShapeTest {
         assertNotEquals(t, t2);
         assertNotEquals(t, t3);
         assertNotEquals(t, t4);
-
-        assertTrue(t1.fastRotation().fastRotation() == t3);
-        assertTrue(t1 == t5);
 
         Shape o1 = shapes[5];
         Shape o2 = o1.fastRotation();
