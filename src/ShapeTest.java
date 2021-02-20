@@ -1,10 +1,7 @@
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -57,7 +54,6 @@ public class ShapeTest {
         assertEquals(z, myZ);
         assertEquals(o, myO);
         assertEquals(t, myT);
-
 
     }
 
@@ -212,7 +208,13 @@ public class ShapeTest {
         Shape o2 = o1.fastRotation();
         assertEquals(o1, o2);
         assertTrue(o1 == o2);
-//
+
+        Shape l1 = shapes[0];
+        Shape l2 = l1.fastRotation();
+        Shape l3 = l2.fastRotation();
+        assertNotEquals(l1, l2);
+        assertTrue(l1 == l3);
+
 //        for (Shape sh : shapes) {
 //            printShape(sh,sh);
 //        }
