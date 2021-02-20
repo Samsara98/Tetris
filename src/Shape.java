@@ -72,6 +72,14 @@ public class Shape {
             before[p.y][p.x] = 1;
         }
 
+//        for (int y = height - 1; y >= 0; y--) {
+//            for (int x = 0; x < width; x++) {
+//                System.out.print(before[y][x]);
+//            }
+//            System.out.println("");
+//        }
+//        System.out.println("-");
+
         StringBuilder point = new StringBuilder();
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -107,6 +115,10 @@ public class Shape {
         }
 
         Shape otherPoint = (Shape) other;
+        if (points.length != otherPoint.points.length) {
+            return false;
+        }
+
         Map<String, Integer> map = new HashMap<>();
         for (Point point : points) {
             map.put(point.toString(), 1);
@@ -160,12 +172,13 @@ public class Shape {
 
         Shape before = root;
         Shape after = root.rotateCounterclockwise();
+        before.next = after;
 
-        do {
-            before.next = after;
+        while (!after.equals(root)) {
             before = after;
             after = before.rotateCounterclockwise();
-        } while (!after.equals(root));
+            before.next = after;
+        }
 
         return root;
     }
