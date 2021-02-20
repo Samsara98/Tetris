@@ -172,15 +172,21 @@ public class Shape {
 
         Shape before = root;
         Shape after = root.rotateCounterclockwise();
-        before.next = after;
 
         while (!after.equals(root)) {
+            before.setNext(after);
             before = after;
             after = before.rotateCounterclockwise();
-            before.next = after;
         }
 
+        before.setNext(root);
         return root;
+    }
+
+
+    public void setNext(Shape next) {
+
+        this.next = next;
     }
 
 

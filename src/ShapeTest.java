@@ -45,13 +45,13 @@ public class ShapeTest {
 
     @Test(timeout = 100)
     public void shapeTest() {
+
         Shape l = new Shape("0 0  1 0  1 1  2 0");
         Point[] points = l.getPoints();
         assertTrue(Arrays.asList(points).contains(new Point(1, 0)));
         assertTrue(Arrays.asList(points).contains(new Point(0, 0)));
         assertTrue(Arrays.asList(points).contains(new Point(1, 1)));
         assertTrue(Arrays.asList(points).contains(new Point(2, 0)));
-
 
 
 //        assertEquals(1, i.getWidth());
@@ -78,6 +78,7 @@ public class ShapeTest {
         Shape l = new Shape(Shape.L_STR);
         Shape l1 = new Shape("0 0  0 1  0 2  1 0");
         Shape l2 = new Shape("0 0  0 1  0 2");
+
         Shape t1 = new Shape("0 0  1 0  1 1  2 0");
         Shape t2 = new Shape("0 0  1 0  1 1  2 0  2 1");
         Shape t3 = new Shape("0 0  1 1  2 0  1 0  2 1");
@@ -159,8 +160,42 @@ public class ShapeTest {
         assertNotNull(t3);
         assertNotNull(t4);
         assertNotNull(t5);
-        assertNotEquals(t1,t2);
-        assertEquals(t5,t1);
+        assertNotEquals(t1, t2);
+        assertEquals(t5, t1);
 
+        Shape o = new Shape("0 0  0 1  1 0  1 1");
+        Shape o1 = o.rotateCounterclockwise();
+        Shape o2 = shapes[5].fastRotation();
+
+        assertEquals(o, o1);
+        assertEquals(o1, o2);
+        assertEquals(o, o2);
+
+        for (Shape sh : shapes) {
+            printShape(sh,sh);
+        }
+
+
+    }
+
+
+    private void printShape(Shape sh,Shape root) {
+
+        int height = sh.getHeight();
+        int width = sh.getWidth();
+        int[][] before = new int[height][width];
+        for (Point p : sh.getPoints()) {
+            before[p.y][p.x] = 1;
+        }
+        for (int y = height - 1; y >= 0; y--) {
+            for (int x = 0; x < width; x++) {
+                System.out.print(before[y][x]);
+            }
+            System.out.println("");
+        }
+        System.out.println("-");
+        if(!sh.fastRotation().equals(root)){
+            printShape(sh.fastRotation(),root);
+        }
     }
 }
