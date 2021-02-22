@@ -150,25 +150,23 @@ public class GamingAreaTest {
 
         Shape i = new Shape("0 0  1 0  2 0  3 0");
         boolean[][] testBoard = {
-                {true, false, true, false, false, false, false, false, false, false},
-                {true, true, true, false, false, false, false, false, false, false},
-                {true, false, true, false, true, false, false, true, false, false},
-                {true, true, true, false, false, false, false, false, false, false},
-                {true, true, true, false, false, true, false, false, false, false}
+                {true, false, true, true, false, false, false, false, false, false},
+                {true, true, true, true, false, false, false, false, false, false},
+                {true, false, true, true, true, false, false, true, false, false},
+                {true, true, true, true, false, false, false, false, false, false},
+                {true, true, true, true, false, true, false, false, false, false}
         };
         gamingArea.setBoard(testBoard);
         gamingArea.place(i, 0, 5);
-        System.out.println(gamingArea);
         boolean[][] testBoard2 = {
                 {false, false, false, false, false, false, false, false, false, false},
                 {true, false, false, false, false, false, false, false, false, false},
-                {false, false, true, false, true, false, false, false, false, false},
+                {false, true, false, true, false, false, false, false, false, false},
                 {true, false, false, false, false, false, false, false, false, false},
                 {true, false, false, false, false, false, false, false, false, false}
         };
         GamingArea gamingArea2 = new GamingArea(5, 10);
         gamingArea2.setBoard(testBoard2);
-        System.out.println(gamingArea2);
         assertArray(gamingArea.getBoard(), testBoard2);
     }
 }
