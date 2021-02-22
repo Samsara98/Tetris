@@ -93,7 +93,7 @@ public class GamingAreaTest {
         Shape t2 = new Shape("0 1  1 0  1 1  1 2");
         assertEquals(1, gamingArea.place(t, 0,2));
         System.out.println(gamingArea);
-        assertEquals(2, gamingArea.place(t, 50,2));
+        assertEquals(2, gamingArea.place(t, 3,0));
         assertEquals(3, gamingArea.place(t, 0,0));
         assertEquals(0, gamingArea.place(t, 1,2));
         System.out.println(gamingArea);
@@ -107,6 +107,10 @@ public class GamingAreaTest {
         }catch (Exception e){
             assertEquals(e.getMessage(),"未commit时调用place");
         }
+        gamingArea.commit();
+        assertEquals(0, gamingArea.place(t2, 3,1));
+        System.out.println(gamingArea);
+
     }
 
 

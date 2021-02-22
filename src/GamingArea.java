@@ -185,7 +185,7 @@ public class GamingArea {
         for (int i = 0; i < board.length; i++) {
             currentBoard[i] = Arrays.copyOf(board[i], height);
         }
-        if (col + shape.getWidth() >= width || row + shape.getHeight() >= height || col < 0 || row < 0) {
+        if (col + shape.getWidth() > width || row + shape.getHeight() > height || col < 0 || row < 0) {
             return OUT;
         }
 
