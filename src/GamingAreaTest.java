@@ -115,7 +115,7 @@ public class GamingAreaTest {
         assertNotSame(gamingArea.getcache(), gamingArea.getBoard());
         for (int x = 0; x < gamingArea.getAreaWidth(); x++) {
             for (int y = 0; y < gamingArea.getAreaHeight(); y++) {
-                assertTrue(gamingArea.getcache()[x][y] == gamingArea.getBoard()[x][y]);
+                assertEquals(gamingArea.getcache()[x][y], gamingArea.getBoard()[x][y]);
             }
         }
 
