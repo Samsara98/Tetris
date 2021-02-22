@@ -7,14 +7,14 @@ public class GamingArea {
     private int width;
     private int height;
     private boolean[][] board;
-    private boolean[][] currentBoard;
+    private boolean[][] cache;
     boolean committed;
 
-    public boolean[][] getCurrentBoard() {
 
-        return currentBoard;
+    public boolean[][] getcache() {
+
+        return cache;
     }
-
 
 
     public boolean[][] getBoard() {
@@ -34,7 +34,10 @@ public class GamingArea {
         this.width = width;
         this.height = height;
         board = new boolean[width][height];
-        currentBoard = new boolean[width][height];
+        cache = new boolean[width][height];
+        for (int i = 0; i < board.length; i++) {
+            cache[i] = Arrays.copyOf(board[i], height);
+        }
         committed = true;
 
         // TODO
@@ -153,8 +156,11 @@ public class GamingArea {
      */
     public boolean isFilled(int col, int row) {
 
-        if (col >= width || row >= height || col < 0 || row < 0)
+        if (col >= width || col < 0 || row < 0)
             return true;
+        if (row >= height) {
+            return false;
+        }
         return board[col][row];
     }
 
@@ -181,11 +187,9 @@ public class GamingArea {
             throw new RuntimeException("未commit时调用place");
         }
 
+
         // TODO
-        for (int i = 0; i < board.length; i++) {
-            currentBoard[i] = Arrays.copyOf(board[i], height);
-        }
-        if (col + shape.getWidth() > width || row + shape.getHeight() > height || col < 0 || row < 0) {
+        if (col + shape.getWidth() - 1 > width || col < 0 || row < 0) {
             return OUT;
         }
 
@@ -194,14 +198,18 @@ public class GamingArea {
                 return COLLIDED;
             }
         }
-
+        //若可以放置修改board
         for (Point point : shape.getPoints()) {
-            board[point.x + col][point.y + row] = true;
+            if (point.y + row < height) {
+                board[point.x + col][point.y + row] = true;
+            }
         }
+        //若可以消除修改board
         if (clearRows() > 0) {
             return ROW_FULL;
         }
 
+        //调用place成功使游戏区变脏
         committed = false;
         return OK;
     }
@@ -236,7 +244,9 @@ public class GamingArea {
      */
     public void undo() {
 
-        board = currentBoard;
+        for (int i = 0; i < board.length; i++) {
+            board[i] = Arrays.copyOf(cache[i], height);
+        }
         committed = true;
     }
 
@@ -246,6 +256,9 @@ public class GamingArea {
      */
     public void commit() {
 
+        for (int i = 0; i < board.length; i++) {
+            cache[i] = Arrays.copyOf(board[i], height);
+        }
         committed = true;
     }
 

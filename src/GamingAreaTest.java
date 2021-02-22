@@ -1,11 +1,15 @@
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.Timeout;
+
 
 import static org.junit.Assert.*;
-
 public class GamingAreaTest {
 
-    GamingArea gamingArea = new GamingArea(5, 10);
+
+    GamingArea gamingArea = new GamingArea(5
+            , 10);
     boolean[][] testBoard = {
             {true, false, true, false, false,false, false, false, false, false},
             {true, true, false, false, false,false, false, false, false, false},
@@ -14,6 +18,8 @@ public class GamingAreaTest {
             {true, true, true, false, false,false, false, false, false, false}
     };
 
+    @Rule
+    public Timeout timeout = new Timeout(100);
 
     @Before
     public void before() {
@@ -82,7 +88,10 @@ public class GamingAreaTest {
         assertFalse(gamingArea.isFilled(2, 1));
         assertFalse(gamingArea.isFilled(0, 1));
         assertTrue(gamingArea.isFilled(100, 1));
-        assertTrue(gamingArea.isFilled(1, 100));
+        assertFalse(gamingArea.isFilled(1, 9));
+        assertFalse(gamingArea.isFilled(1, 10));
+        assertFalse(gamingArea.isFilled(1, 11));
+        assertFalse(gamingArea.isFilled(1, 12));
         assertTrue(gamingArea.isFilled(100, 100));
     }
 
@@ -91,16 +100,24 @@ public class GamingAreaTest {
 
         Shape t = new Shape("0 1  1 0  1 1  2 1");
         Shape t2 = new Shape("0 1  1 0  1 1  1 2");
+        Shape l = new Shape("0 0  0 1  0 2  0 3");
         assertEquals(1, gamingArea.place(t, 0,2));
-        System.out.println(gamingArea);
-        assertEquals(2, gamingArea.place(t, 3,0));
+        gamingArea.commit();
+        assertEquals(2, gamingArea.place(t, 4,0));
+        assertEquals(2, gamingArea.place(t, -1,0));
+        assertEquals(2, gamingArea.place(t, 0,-1));
+        assertEquals(0, gamingArea.place(t, 0,9));
+        gamingArea.commit();
         assertEquals(3, gamingArea.place(t, 0,0));
         assertEquals(0, gamingArea.place(t, 1,2));
-        System.out.println(gamingArea);
 
         gamingArea.undo();
-        assertSame(gamingArea.getCurrentBoard(),gamingArea.getBoard());
-        System.out.println(gamingArea);
+        assertNotSame(gamingArea.getcache(), gamingArea.getBoard());
+        for (int x = 0; x < gamingArea.getAreaWidth(); x++) {
+            for (int y = 0; y < gamingArea.getAreaHeight(); y++) {
+                assertTrue(gamingArea.getcache()[x][y] == gamingArea.getBoard()[x][y]);
+            }
+        }
 
         try{
             gamingArea.committed = false;
@@ -109,8 +126,12 @@ public class GamingAreaTest {
         }
         gamingArea.commit();
         assertEquals(0, gamingArea.place(t2, 3,1));
-        System.out.println(gamingArea);
 
+        gamingArea.commit();
+        assertEquals(0, gamingArea.place(t, 2,9));
+
+        gamingArea.commit();
+        assertEquals(0, gamingArea.place(l, 4,7));
     }
 
 

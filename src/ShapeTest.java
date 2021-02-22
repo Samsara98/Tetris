@@ -1,11 +1,16 @@
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.Timeout;
 
 import java.util.*;
 
 import static org.junit.Assert.*;
 
 public class ShapeTest {
+    @Rule
+    public Timeout timeout = new Timeout(100);
+
     private Shape t;
     private Shape i;
     private Shape l;
@@ -30,7 +35,7 @@ public class ShapeTest {
     }
 
 
-    @Test(timeout = 100)
+    @Test
     public void stupidTest() {
         // 形状T
         assertEquals(4, t.getPoints().length);
