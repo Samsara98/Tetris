@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 /**
  * 游戏区域，本质上是一个boolean型二维数组，一些地方有方块、另一些地方是空白
  */
@@ -5,22 +7,45 @@ public class GamingArea {
     private int width;
     private int height;
     private boolean[][] board;
+    private boolean[][] currentBoard;
     boolean committed;
+
+    public boolean[][] getCurrentBoard() {
+
+        return currentBoard;
+    }
+
+
+
+    public boolean[][] getBoard() {
+
+        return board;
+    }
+
+
+    public void setBoard(boolean[][] board) {
+
+        this.board = board;
+    }
 
 
     public GamingArea(int width, int height) {
+
         this.width = width;
         this.height = height;
         board = new boolean[width][height];
+        currentBoard = new boolean[width][height];
         committed = true;
 
         // TODO
     }
 
+
     /**
      * 返回游戏区域的宽度（非像素，而是横着可以放多少方块）
      */
     public int getAreaWidth() {
+
         return width;
     }
 
@@ -29,6 +54,7 @@ public class GamingArea {
      * 返回游戏区域的高度（非像素，而是竖着可以放多少方块）
      */
     public int getAreaHeight() {
+
         return height;
     }
 
@@ -37,9 +63,17 @@ public class GamingArea {
      * 整个游戏区域中已经放置的最高方块的位置
      */
     public int getMaxHeight() {
-        // TODO
+
+        for (int y = height - 1; y >= 0; y--) {
+            for (int x = 0; x < width; x++) {
+                if (board[x][y]) {
+                    return y;
+                }
+            }
+        }
         return 0;
     }
+
 
     /**
      * 基于当前的游戏区格局，计算当用户按下掉落键（n）时，某一形状应该下降到的高度
@@ -50,6 +84,27 @@ public class GamingArea {
      */
     public int getDropHeight(Shape shape, int col) {
         // TODO
+        if (col > width || col < 0) {
+            return 0;
+        }
+
+        int maxHeight = 0;
+        for (int x = 0; x < shape.getWidth(); x++) {
+            maxHeight = Math.max(maxHeight, getColumnHeight(col + x));
+        }
+        maxHeight--;
+        for (int y = maxHeight + 2 - shape.getHeight(); y <= maxHeight + 1; y++) {
+            boolean isBreak = false;
+            for (Point point : shape.getPoints()) {
+                if (isFilled(point.x, point.y + y)) {
+                    isBreak = true;
+                    break;
+                }
+            }
+            if (!isBreak) {
+                return y - 1 + shape.getHeight();
+            }
+        }
         return 0;
     }
 
@@ -59,7 +114,16 @@ public class GamingArea {
      * 注意：如果某一列有空心的情况，高度应以位置最高的方块为准。
      */
     public int getColumnHeight(int col) {
-        // TODO
+
+        if (col > width || col < 0) {
+            return 0;
+        }
+        for (int y = height - 1; y >= 0; y--) {
+            if (board[col][y]) {
+                return y + 1;
+            }
+        }
+
         return 0;
     }
 
@@ -68,8 +132,18 @@ public class GamingArea {
      * 某一行已经填上方块的个数
      */
     public int getFilledBlockCount(int row) {
-        // TODO
-        return 0;
+
+        int rowNum = 0;
+        if (row > height || row < 0) {
+            return rowNum;
+        }
+        for (int x = 0; x < width; x++) {
+            if (board[x][row]) {
+                rowNum += 1;
+            }
+        }
+
+        return rowNum;
     }
 
 
@@ -78,8 +152,10 @@ public class GamingArea {
      * 如果坐标超出边界，返回true即可。
      */
     public boolean isFilled(int col, int row) {
-        // TODO
-        return false;
+
+        if (col >= width || row >= height || col < 0 || row < 0)
+            return true;
+        return board[col][row];
     }
 
 
@@ -87,6 +163,7 @@ public class GamingArea {
     public static final int ROW_FULL = 1;
     public static final int OUT = 2;
     public static final int COLLIDED = 3;
+
 
     /**
      * 尝试将形状放置在/调整到游戏区域某个位置，可能有几种不同的结果：
@@ -105,7 +182,27 @@ public class GamingArea {
         }
 
         // TODO
+        for (int i = 0; i < board.length; i++) {
+            currentBoard[i] = Arrays.copyOf(board[i], height);
+        }
+        if (col + shape.getWidth() >= width || row + shape.getHeight() >= height || col < 0 || row < 0) {
+            return OUT;
+        }
 
+        for (Point point : shape.getPoints()) {
+            if (isFilled(point.x + col, point.y + row)) {
+                return COLLIDED;
+            }
+        }
+
+        for (Point point : shape.getPoints()) {
+            board[point.x + col][point.y + row] = true;
+        }
+        if (clearRows() > 0) {
+            return ROW_FULL;
+        }
+
+        committed = false;
         return OK;
     }
 
@@ -114,8 +211,22 @@ public class GamingArea {
      * 消除填满的行，更新游戏区，并返回消除的行数
      */
     public int clearRows() {
+
         int rowsCleared = 0;
         // TODO:
+        boolean[][] board2 = new boolean[width][height];
+        int row = 0;
+        for (int y = 0; y < height; y++) {
+            if (getFilledBlockCount(y) == width) {
+                rowsCleared += 1;
+            } else {
+                for (int x = 0; x < width; x++) {
+                    board2[x][row] = board[x][y];
+                }
+                row++;
+            }
+        }
+        board = board2;
         return rowsCleared;
     }
 
@@ -124,7 +235,9 @@ public class GamingArea {
      * 撤销操作，恢复到放置前的状态
      */
     public void undo() {
-        // TODO
+
+        board = currentBoard;
+        committed = true;
     }
 
 
@@ -132,6 +245,7 @@ public class GamingArea {
      * 放置生效
      */
     public void commit() {
+
         committed = true;
     }
 
@@ -140,6 +254,7 @@ public class GamingArea {
      * 将当前游戏区域转换成一个字符串，可以方便debug
      */
     public String toString() {
+
         StringBuilder buffer = new StringBuilder();
 
         // 当前的游戏区域
