@@ -52,7 +52,7 @@ public class GamingArea {
         for (int y = height - 1; y >= 0; y--) {
             for (int x = 0; x < width; x++) {
                 if (board[x][y]) {
-                    return y+1;
+                    return y + 1;
                 }
             }
         }
@@ -188,10 +188,10 @@ public class GamingArea {
                 board[point.x + col][point.y + row] = true;
             }
         }
-
-        //若可以消除修改board
-        if (clearRows() > 0) {
-            return ROW_FULL;
+        for (int y = 0; y < height; y++) {
+            if (getFilledBlockCount(y) == width) {
+                return ROW_FULL;
+            }
         }
 
         return OK;
@@ -242,6 +242,7 @@ public class GamingArea {
         for (int i = 0; i < board.length; i++) {
             cache[i] = Arrays.copyOf(board[i], height);
         }
+        clearRows();
         committed = true;
     }
 

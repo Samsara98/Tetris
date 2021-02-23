@@ -49,7 +49,9 @@ public class Tetris extends JComponent {
 
     public final int DELAY = 400;
 
+
     Tetris(int pixels) {
+
         super();
 
         // 两边边界各1px，所以+2
@@ -89,6 +91,7 @@ public class Tetris extends JComponent {
      * 开始游戏
      */
     public void startGame() {
+
         count = 0;
         score = 0;
         gameOn = true;
@@ -110,14 +113,17 @@ public class Tetris extends JComponent {
      * 设置开始、暂停键状态
      */
     void toggleButtons() {
+
         startButton.setEnabled(!gameOn);
         stopButton.setEnabled(gameOn);
     }
+
 
     /**
      * 暂停游戏
      */
     public void stopGame() {
+
         gameOn = false;
         toggleButtons();
         timer.stop();
@@ -132,6 +138,7 @@ public class Tetris extends JComponent {
      * 注意：在调用该函数前，游戏区域应处于干净状态
      */
     public int updateCurrentShape(Shape shape, int x, int y) {
+
         int result = gamingArea.place(shape, x, y);
 
         // 放置成功
@@ -155,6 +162,7 @@ public class Tetris extends JComponent {
      * 随机产生下一个形状
      */
     public Shape pickNextShape() {
+
         int shapeIndex;
         shapeIndex = (int) (shapes.length * random.nextDouble());
         Shape shape = shapes[shapeIndex];
@@ -169,6 +177,7 @@ public class Tetris extends JComponent {
      * 添加一个新的形状，如果不能添加则结束游戏
      */
     public void addNewShape() {
+
         count++;
         score++;
 
@@ -187,10 +196,12 @@ public class Tetris extends JComponent {
         updateCounters();
     }
 
+
     /**
      * 更新计数器label
      */
     void updateCounters() {
+
         countLabel.setText("掉落：" + count);
         scoreLabel.setText("得分：" + score);
     }
@@ -237,6 +248,7 @@ public class Tetris extends JComponent {
     public static final int RIGHT = 2;
     public static final int DROP = 3;
     public static final int DOWN = 4;
+
 
     /**
      * 游戏进行的最小"时间"单位，每tick一次，就移动一次Shape。
@@ -295,14 +307,18 @@ public class Tetris extends JComponent {
 
     }
 
+
     /**
      * 判断当前形状是否已经触及天花板
      */
     private boolean currentShapeReachedTop() {
+
         return gamingArea.getMaxHeight() > gamingArea.getAreaHeight() - TOP_SPACE;
     }
 
+
     private void tryClearRows() {
+
         int cleared = gamingArea.clearRows();
         if (cleared > 0) {
             // 消1行 - 5分
@@ -330,6 +346,7 @@ public class Tetris extends JComponent {
         }
     }
 
+
     /**
      * 以下函数处理游戏坐标系和像素坐标系之间的转换
      * +1、-2是处理边界
@@ -338,21 +355,28 @@ public class Tetris extends JComponent {
 
     // 每个block的宽度
     private float dX() {
+
         return (((float) (getWidth() - 2)) / gamingArea.getAreaWidth());
     }
 
+
     // 每个block的高度
     private float dY() {
+
         return (((float) (getHeight() - 2)) / gamingArea.getAreaHeight());
     }
 
+
     // block左边界的x坐标
     private int xPixel(int x) {
+
         return (Math.round(1 + (x * dX())));
     }
 
+
     // block上边界的y坐标
     private int yPixel(int y) {
+
         return (Math.round(getHeight() - 1 - (y + 1) * dY()));
     }
 
@@ -375,7 +399,9 @@ public class Tetris extends JComponent {
         paintBlocks(g);
     }
 
+
     private void paintBlocks(Graphics g) {
+
         final int dx = Math.round(dX() - 2);
         final int dy = Math.round(dY() - 2);
         final int nCols = gamingArea.getAreaWidth();
@@ -410,6 +436,7 @@ public class Tetris extends JComponent {
      * 调整速度
      */
     public void updateTimer() {
+
         double value = ((double) speedSlider.getValue()) / speedSlider.getMaximum();
         timer.setDelay((int) (DELAY - value * DELAY));
     }
@@ -419,6 +446,7 @@ public class Tetris extends JComponent {
      * 游戏的控制面板，作为Tetris的一个方法，可以访问其成员变量
      */
     public JPanel createControlPanel() {
+
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
@@ -459,7 +487,9 @@ public class Tetris extends JComponent {
         return panel;
     }
 
+
     public static JFrame createFrame(Tetris tetris) {
+
         JFrame frame = new JFrame("俄罗斯方块");
         frame.setLayout(new BorderLayout());
 
@@ -475,6 +505,7 @@ public class Tetris extends JComponent {
 
         return frame;
     }
+
 
     public static void main(String[] args) {
         // boilerplate code

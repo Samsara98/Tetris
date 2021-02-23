@@ -134,8 +134,8 @@ public class GamingAreaTest {
         Shape testBoard = new Shape("0 1  1 0  3 0  4 0  2 1  3 1  4 1  2 3  3 3  3 2  4 3");
         GamingArea gamingArea1 = new GamingArea(5, 10);
         gamingArea1.place(testBoard, 0, 0);
-        gamingArea.place(t,2,2);
-        areaEquals(gamingArea1,gamingArea);
+        gamingArea.place(t, 2, 2);
+        areaEquals(gamingArea1, gamingArea);
         gamingArea.undo();
 
         assertEquals(0, gamingArea.place(t, 2, 2));
@@ -181,23 +181,26 @@ public class GamingAreaTest {
 
     }
 
+
     @Test
-    public void  commitTest(){
-        gamingArea.place(t,0,1);
+    public void commitTest() {
+
+        gamingArea.place(t, 0, 1);
         assertFalse(gamingArea.committed);
         gamingArea.commit();
         assertTrue(gamingArea.committed);
     }
 
-    @Test
-    public void  undoTest(){
 
-        GamingArea gamingArea1 = new GamingArea(5,10);
+    @Test
+    public void undoTest() {
+
+        GamingArea gamingArea1 = new GamingArea(5, 10);
         Shape testBoard = new Shape("0 0  1 0  2 0  3 0  4 0  1 1  2 2  0 2  3 1  3 2  4 1  4 2");
         gamingArea1.place(testBoard, 0, 0);
         gamingArea1.commit();
 
-        gamingArea.place(t,2,2);
+        gamingArea.place(t, 2, 2);
 
         assertFalse(gamingArea.committed);
         gamingArea.undo();
@@ -222,25 +225,35 @@ public class GamingAreaTest {
     @Test
     public void clearTest() {
 
-        Shape l = new Shape("0 0  0 1  0 2  0 3");
-        Shape l2 = new Shape("0 0  2 0  3 0  4 0");
-        Shape t2 = new Shape("0 1  1 0  1 1  2 1  3 1  4 1");
-
         Shape testBoard = new Shape("1 0  3 0  4 0  0 1  1 1  2 1");
         GamingArea gamingArea1 = new GamingArea(5, 10);
         gamingArea1.place(testBoard, 0, 0);
-        gamingArea.place(t,0,1);
+        gamingArea.place(t, 0, 1);
+        gamingArea.commit();
         areaEquals(gamingArea, gamingArea1);
-        gamingArea.undo();
+
+    }
+
+
+    @Test
+    public void clearTest2() {
+
+        Shape t2 = new Shape("0 1  1 0  1 1  2 1  3 1  4 1");
 
         Shape testBoard2 = new Shape("1 0  3 0  4 0");
         GamingArea gamingArea2 = new GamingArea(5, 10);
         gamingArea2.place(testBoard2, 0, 0);
-        gamingArea.place(t2,0,1);
+        gamingArea.place(t2, 0, 1);
+        gamingArea.commit();
         areaEquals(gamingArea, gamingArea2);
-        gamingArea.undo();
+    }
 
 
+    @Test
+    public void clearTest3() {
+
+        Shape l = new Shape("0 0  0 1  0 2  0 3");
+        Shape l2 = new Shape("0 0  2 0  3 0  4 0");
 
         Shape testBoard3 = new Shape("1 0  1 1  3 0  4 0");
         GamingArea gamingArea3 = new GamingArea(5, 10);
@@ -251,7 +264,9 @@ public class GamingAreaTest {
         gamingArea.commit();
         gamingArea.place(l2, 0, 3);
         gamingArea.commit();
-        gamingArea.place(l, 1,1);   //多行消除
-        areaEquals(gamingArea,gamingArea3);
+        gamingArea.place(l, 1, 1);   //多行消除
+        gamingArea.commit();
+        areaEquals(gamingArea, gamingArea3);
     }
+
 }
