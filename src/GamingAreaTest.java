@@ -83,26 +83,21 @@ public class GamingAreaTest {
     @Test
     public void getFilledBlockCountTest() {
 
-        assertEquals(0, gamingArea.getFilledBlockCount(-1));
         assertEquals(3, gamingArea.getFilledBlockCount(0));
         assertEquals(4, gamingArea.getFilledBlockCount(1));
         assertEquals(0, gamingArea.getFilledBlockCount(2));
         assertEquals(0, gamingArea.getFilledBlockCount(3));
-        assertEquals(0, gamingArea.getFilledBlockCount(40));
     }
 
 
     @Test
     public void getColumnHeightTest() {
 
-
-        assertEquals(0, gamingArea.getColumnHeight(-1));
         assertEquals(2, gamingArea.getColumnHeight(0));
         assertEquals(1, gamingArea.getColumnHeight(1));
         assertEquals(2, gamingArea.getColumnHeight(2));
         assertEquals(2, gamingArea.getColumnHeight(3));
         assertEquals(2, gamingArea.getColumnHeight(4));
-        assertEquals(0, gamingArea.getColumnHeight(100));
 
         assertEquals(2, gamingArea.getColumnHeight(0));
         gamingArea.place(t,0,8);
