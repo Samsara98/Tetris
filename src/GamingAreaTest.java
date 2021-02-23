@@ -165,6 +165,25 @@ public class GamingAreaTest {
         assertEquals(0, gamingArea.place(l, 4, 7));
     }
 
+    @Test
+    public void  undoTest(){
+
+        GamingArea gamingArea1 = new GamingArea(5, 10);
+        assertEquals(0, gamingArea1.getMaxHeight());
+
+        GamingArea gamingArea2 = new GamingArea(5, 10);
+        assertEquals(0, gamingArea2.getMaxHeight());
+
+        gamingArea2.commit();
+        Shape testBoard = new Shape("0 0 ");
+        gamingArea2.place(testBoard, 0, 0);
+        gamingArea2.undo();
+        for (int x = 0; x < gamingArea2.getAreaWidth(); x++) {
+            for (int y = 0; y < gamingArea2.getAreaHeight(); y++) {
+                assertEquals(gamingArea1.isFilled(x,y),gamingArea2.isFilled(x,y));
+            }
+        }
+    }
 
     @Test
     public void clearTest() {
