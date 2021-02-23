@@ -20,13 +20,19 @@ public class GamingAreaTest {
     @Before
     public void before() {
 
+        isFilledTest();
+
         assertTrue("true", gamingArea.committed);
         Shape testBoard = new Shape("0 1  1 0  3 0  4 0  2 1  3 1  4 1");
         gamingArea.place(testBoard, 0, 0);
         gamingArea.commit();
 
+        isFilledTest2();
+
         t = new Shape("0 1  1 0  1 1  2 1");
         t2 = new Shape("0 1  1 0  1 1  1 2");
+
+
 
     }
 
@@ -109,22 +115,36 @@ public class GamingAreaTest {
     }
 
 
-    @Test
     public void isFilledTest() {
 
         assertFalse(gamingArea.isFilled(0, 0));
+        assertFalse(gamingArea.isFilled(1, 9));
         assertFalse(gamingArea.isFilled(1, 1));
-        assertTrue(gamingArea.isFilled(2, 1));
+        assertFalse(gamingArea.isFilled(1, 0));
+        assertFalse(gamingArea.isFilled(2, 0));
+    }
+
+
+    public void isFilledTest2() {
+
+        assertFalse(gamingArea.isFilled(0, 0));
+        assertFalse(gamingArea.isFilled(1, 1));
         assertTrue(gamingArea.isFilled(0, 1));
+        assertTrue(gamingArea.isFilled(1, 0));
+        assertTrue(gamingArea.isFilled(3, 0));
+        assertTrue(gamingArea.isFilled(4, 0));
+        assertTrue(gamingArea.isFilled(2, 1));
+        assertTrue(gamingArea.isFilled(3, 1));
+        assertTrue(gamingArea.isFilled(4, 1));
 
         assertTrue(gamingArea.isFilled(100, 1));
+        assertTrue(gamingArea.isFilled(-1, 1));
         assertFalse(gamingArea.isFilled(1, 9));
         assertFalse(gamingArea.isFilled(1, 10));
         assertFalse(gamingArea.isFilled(1, 11));
         assertFalse(gamingArea.isFilled(1, 12));
         assertTrue(gamingArea.isFilled(100, 100));
     }
-
 
     @Test
     public void placeTest() {
@@ -136,6 +156,9 @@ public class GamingAreaTest {
         gamingArea1.place(testBoard, 0, 0);
         gamingArea.place(t, 2, 2);
         areaEquals(gamingArea1, gamingArea);
+        gamingArea.undo();
+
+        assertEquals(0, gamingArea.place(l, 1, 2));
         gamingArea.undo();
 
         assertEquals(0, gamingArea.place(t, 2, 2));
@@ -199,11 +222,7 @@ public class GamingAreaTest {
         Shape testBoard = new Shape("1 0  2 1  0 1  3 0  3 1  4 0  4 1");
         gamingArea1.place(testBoard, 0, 0);
 
-        System.out.println(gamingArea1);
-        System.out.println(gamingArea);
-
         gamingArea.place(t, 2, 2);
-
         assertFalse(gamingArea.committed);
         gamingArea.undo();
         assertTrue(gamingArea.committed);

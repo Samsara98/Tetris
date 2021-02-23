@@ -9,8 +9,8 @@ import java.util.Random;
  * 游戏的逻辑则主要放在GamingArea和Shape里
  */
 public class Tetris extends JComponent {
-    public static final int WIDTH = 10;
-    public static final int HEIGHT = 20;
+    public static final int WIDTH = 15;
+    public static final int HEIGHT = 30;
 
     // 顶部预留一些空间用于形状的掉落。当方块堆积进入该空间时，即可算作游戏结束
     public static final int TOP_SPACE = 4;
@@ -47,7 +47,7 @@ public class Tetris extends JComponent {
     protected javax.swing.Timer timer;
     protected JSlider speedSlider;
 
-    public final int DELAY = 400;
+    public final int DELAY = 300;
 
 
     Tetris(int pixels) {

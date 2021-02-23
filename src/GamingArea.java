@@ -17,12 +17,18 @@ public class GamingArea {
         this.height = height;
         board = new boolean[width][height];
         cache = new boolean[width][height];
-        for (int i = 0; i < board.length; i++) {
-            cache[i] = Arrays.copyOf(board[i], height);
-        }
+        arrayCopy(cache, board);
         committed = true;
 
         // TODO
+    }
+
+
+    private void arrayCopy(boolean[][] cache, boolean[][] board) {
+
+        for (int i = 0; i < width; i++) {
+            cache[i] = Arrays.copyOf(board[i], height);
+        }
     }
 
 
@@ -228,9 +234,7 @@ public class GamingArea {
      */
     public void undo() {
 
-        for (int i = 0; i < board.length; i++) {
-            board[i] = Arrays.copyOf(cache[i], height);
-        }
+        arrayCopy(board, cache);
         committed = true;
     }
 
@@ -240,9 +244,7 @@ public class GamingArea {
      */
     public void commit() {
 
-        for (int i = 0; i < board.length; i++) {
-            cache[i] = Arrays.copyOf(board[i], height);
-        }
+        arrayCopy(cache, board);
         committed = true;
     }
 
