@@ -77,7 +77,7 @@ public class GamingArea {
      */
     public int getDropHeight(Shape shape, int col) {
         // TODO
-        if (col + shape.getWidth() >= width || col < 0) {
+        if (null == shape) {
             return 99;
         }
 
@@ -194,6 +194,9 @@ public class GamingArea {
             throw new RuntimeException("未commit时调用place");
         }
 
+        if (null == shape){
+            return COLLIDED;
+        }
 
         // TODO
         //调用place成功使游戏区变脏
