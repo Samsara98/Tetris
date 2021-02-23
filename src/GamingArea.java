@@ -78,7 +78,7 @@ public class GamingArea {
     public int getDropHeight(Shape shape, int col) {
         // TODO
         if (null == shape) {
-            return 99;
+            return 0;
         }
 
         int row = height;
@@ -194,7 +194,7 @@ public class GamingArea {
             throw new RuntimeException("未commit时调用place");
         }
 
-        if (null == shape){
+        if (null == shape) {
             return COLLIDED;
         }
 

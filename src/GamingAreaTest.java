@@ -93,6 +93,7 @@ public class GamingAreaTest {
     @Test
     public void getColumnHeightTest() {
 
+
         assertEquals(2, gamingArea.getColumnHeight(0));
         assertEquals(1, gamingArea.getColumnHeight(1));
         assertEquals(2, gamingArea.getColumnHeight(2));
@@ -108,7 +109,6 @@ public class GamingAreaTest {
     @Test
     public void getDropHeightTest() {
 
-
         Shape t = new Shape("0 1  1 0  1 1  2 1");
         Shape t2 = new Shape("0 1  1 0  1 1  1 2");
 
@@ -119,7 +119,6 @@ public class GamingAreaTest {
         gamingArea.place(t,1,8);
         assertEquals(3, gamingArea.getDropHeight(t2, 1));
         gamingArea.undo();
-
 
         gamingArea.place(t2,0,1);
         gamingArea.clearRows();
@@ -160,6 +159,7 @@ public class GamingAreaTest {
 
         assertTrue(gamingArea.isFilled(100, 1));
         assertTrue(gamingArea.isFilled(-1, 1));
+        assertTrue(gamingArea.isFilled(-1, -1));
         assertFalse(gamingArea.isFilled(1, 9));
         assertFalse(gamingArea.isFilled(1, 10));
         assertFalse(gamingArea.isFilled(1, 11));
