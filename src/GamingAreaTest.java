@@ -125,8 +125,6 @@ public class GamingAreaTest {
         assertEquals(3, gamingArea.getDropHeight(t2, 1));
         gamingArea.undo();
 
-        assertEquals(99, gamingArea.getDropHeight(t2, -1));
-        assertEquals(99, gamingArea.getDropHeight(t2, 100));
 
         gamingArea.place(t2,0,1);
         gamingArea.clearRows();
