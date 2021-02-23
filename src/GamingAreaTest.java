@@ -196,17 +196,19 @@ public class GamingAreaTest {
     public void undoTest() {
 
         GamingArea gamingArea1 = new GamingArea(5, 10);
-        Shape testBoard = new Shape("0 0  1 0  2 0  3 0  4 0  1 1  2 2  0 2  3 1  3 2  4 1  4 2");
+        Shape testBoard = new Shape("1 0  2 1  0 1  3 0  3 1  4 0  4 1");
         gamingArea1.place(testBoard, 0, 0);
-        gamingArea1.commit();
+
+        System.out.println(gamingArea1);
+        System.out.println(gamingArea);
 
         gamingArea.place(t, 2, 2);
 
         assertFalse(gamingArea.committed);
         gamingArea.undo();
         assertTrue(gamingArea.committed);
-
         areaEquals(gamingArea1, gamingArea);
+
         gamingArea.undo();
         areaEquals(gamingArea1, gamingArea);
     }
@@ -229,7 +231,7 @@ public class GamingAreaTest {
         GamingArea gamingArea1 = new GamingArea(5, 10);
         gamingArea1.place(testBoard, 0, 0);
         gamingArea.place(t, 0, 1);
-        gamingArea.commit();
+        gamingArea.clearRows();
         areaEquals(gamingArea, gamingArea1);
 
     }
@@ -244,7 +246,7 @@ public class GamingAreaTest {
         GamingArea gamingArea2 = new GamingArea(5, 10);
         gamingArea2.place(testBoard2, 0, 0);
         gamingArea.place(t2, 0, 1);
-        gamingArea.commit();
+        gamingArea.clearRows();
         areaEquals(gamingArea, gamingArea2);
     }
 
@@ -265,7 +267,7 @@ public class GamingAreaTest {
         gamingArea.place(l2, 0, 3);
         gamingArea.commit();
         gamingArea.place(l, 1, 1);   //多行消除
-        gamingArea.commit();
+        gamingArea.clearRows();
         areaEquals(gamingArea, gamingArea3);
     }
 

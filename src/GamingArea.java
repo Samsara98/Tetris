@@ -188,6 +188,7 @@ public class GamingArea {
                 board[point.x + col][point.y + row] = true;
             }
         }
+
         for (int y = 0; y < height; y++) {
             if (getFilledBlockCount(y) == width) {
                 return ROW_FULL;
@@ -204,7 +205,7 @@ public class GamingArea {
     public int clearRows() {
 
         int rowsCleared = 0;
-        // TODO:
+
         boolean[][] board2 = new boolean[width][height];
         int row = 0;
         for (int y = 0; y < height; y++) {
@@ -242,7 +243,6 @@ public class GamingArea {
         for (int i = 0; i < board.length; i++) {
             cache[i] = Arrays.copyOf(board[i], height);
         }
-        clearRows();
         committed = true;
     }
 
