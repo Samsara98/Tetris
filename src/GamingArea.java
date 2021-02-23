@@ -11,24 +11,6 @@ public class GamingArea {
     boolean committed;
 
 
-    public boolean[][] getcache() {
-
-        return cache;
-    }
-
-
-    public boolean[][] getBoard() {
-
-        return board;
-    }
-
-
-    public void setBoard(boolean[][] board) {
-
-        this.board = board;
-    }
-
-
     public GamingArea(int width, int height) {
 
         this.width = width;
@@ -70,7 +52,7 @@ public class GamingArea {
         for (int y = height - 1; y >= 0; y--) {
             for (int x = 0; x < width; x++) {
                 if (board[x][y]) {
-                    return y;
+                    return y+1;
                 }
             }
         }
@@ -189,6 +171,8 @@ public class GamingArea {
 
 
         // TODO
+        //调用place成功使游戏区变脏
+        committed = false;
         if (col + shape.getWidth() - 1 > width || col < 0 || row < 0) {
             return OUT;
         }
@@ -204,13 +188,12 @@ public class GamingArea {
                 board[point.x + col][point.y + row] = true;
             }
         }
+
         //若可以消除修改board
         if (clearRows() > 0) {
             return ROW_FULL;
         }
 
-        //调用place成功使游戏区变脏
-        committed = false;
         return OK;
     }
 
