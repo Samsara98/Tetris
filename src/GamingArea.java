@@ -1,5 +1,7 @@
 import java.util.Arrays;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * 游戏区域，本质上是一个boolean型二维数组，一些地方有方块、另一些地方是空白
  */
@@ -57,7 +59,7 @@ public class GamingArea {
 
         for (int y = height - 1; y >= 0; y--) {
             for (int x = 0; x < width; x++) {
-                if (board[x][y]) {
+                if (cache[x][y]) {
                     return y + 1;
                 }
             }
@@ -75,28 +77,45 @@ public class GamingArea {
      */
     public int getDropHeight(Shape shape, int col) {
         // TODO
-        if (col > width || col < 0) {
-            return 0;
+        if (col + shape.getWidth() >= width || col < 0) {
+            return 99;
+        }
+
+        int row = height;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (board[x][y] != cache[x][y] && y < row) {
+                    row = y;
+                }
+            }
         }
 
         int maxHeight = 0;
-        for (int x = 0; x < shape.getWidth(); x++) {
-            maxHeight = Math.max(maxHeight, getColumnHeight(col + x));
-        }
-        maxHeight--;
-        for (int y = maxHeight + 2 - shape.getHeight(); y <= maxHeight + 1; y++) {
-            boolean isBreak = false;
-            for (Point point : shape.getPoints()) {
-                if (isFilled(point.x, point.y + y)) {
-                    isBreak = true;
-                    break;
+
+        label:
+        for (int y = row - 1; y >= 0; y--) {
+            for (int x = col; x < col + shape.getWidth(); x++) {
+                if (board[x][y]) {
+                    maxHeight = y;
+                    break label;
                 }
             }
-            if (!isBreak) {
-                return y - 1 + shape.getHeight();
+        }
+
+        int target = 0;
+
+        for (int y = maxHeight + shape.getHeight() - 1; y >= maxHeight - shape.getHeight() + 2; y--) {
+            if (y < 0) {
+                return target;
+            }
+            target = y - 1 + shape.getHeight();
+            for (Point point : shape.getPoints()) {
+                if (isFilled(point.x + col, point.y + y)) {
+                    return target;
+                }
             }
         }
-        return 0;
+        return target;
     }
 
 

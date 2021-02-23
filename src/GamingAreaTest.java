@@ -57,23 +57,25 @@ public class GamingAreaTest {
         gamingArea2.commit();
         Shape testBoard = new Shape("0 0 ");
         gamingArea2.place(testBoard, 0, 0);
+        assertEquals(0, gamingArea2.getMaxHeight());
+        gamingArea2.commit();
         assertEquals(1, gamingArea2.getMaxHeight());
 
 
         gamingArea.place(t, 2, 2);
+        gamingArea.commit();
         assertEquals(4, gamingArea.getMaxHeight());
         gamingArea.undo();
 
-        gamingArea.place(t, 0, 8);
-        assertEquals(10, gamingArea.getMaxHeight());
-        gamingArea.undo();
-
         gamingArea.place(t, 0, 9);
+        assertEquals(4, gamingArea.getMaxHeight());
+        gamingArea.commit();
         assertEquals(10, gamingArea.getMaxHeight());
         gamingArea.undo();
 
         gamingArea.place(t, 0, 10);
-        assertEquals(2, gamingArea.getMaxHeight());
+        gamingArea.commit();
+        assertEquals(10, gamingArea.getMaxHeight());
         gamingArea.undo();
     }
 
@@ -93,6 +95,7 @@ public class GamingAreaTest {
     @Test
     public void getColumnHeightTest() {
 
+
         assertEquals(0, gamingArea.getColumnHeight(-1));
         assertEquals(2, gamingArea.getColumnHeight(0));
         assertEquals(1, gamingArea.getColumnHeight(1));
@@ -100,28 +103,53 @@ public class GamingAreaTest {
         assertEquals(2, gamingArea.getColumnHeight(3));
         assertEquals(2, gamingArea.getColumnHeight(4));
         assertEquals(0, gamingArea.getColumnHeight(100));
+
+        assertEquals(2, gamingArea.getColumnHeight(0));
+        gamingArea.place(t,0,8);
+        assertEquals(10, gamingArea.getColumnHeight(0));
     }
 
 
     @Test
     public void getDropHeightTest() {
 
+
         Shape t = new Shape("0 1  1 0  1 1  2 1");
         Shape t2 = new Shape("0 1  1 0  1 1  1 2");
+
+        gamingArea.place(t,0,8);
         assertEquals(2, gamingArea.getDropHeight(t, 0));
-        assertEquals(3, gamingArea.getDropHeight(t2, 0));
-        assertEquals(0, gamingArea.getDropHeight(t2, -1));
-        assertEquals(0, gamingArea.getDropHeight(t2, 100));
+        gamingArea.undo();
+
+        gamingArea.place(t,1,8);
+        assertEquals(3, gamingArea.getDropHeight(t2, 1));
+        gamingArea.undo();
+
+        assertEquals(99, gamingArea.getDropHeight(t2, -1));
+        assertEquals(99, gamingArea.getDropHeight(t2, 100));
+
+        gamingArea.place(t2,0,1);
+        gamingArea.clearRows();
+        gamingArea.commit();
+
+        gamingArea.place(t,0,6);
+        gamingArea.commit();
+        gamingArea.place(t,0,4);
+        System.out.println(gamingArea);
+        assertEquals(4, gamingArea.getDropHeight(t, 0));
+
     }
 
 
     public void isFilledTest() {
 
-        assertFalse(gamingArea.isFilled(0, 0));
-        assertFalse(gamingArea.isFilled(1, 9));
-        assertFalse(gamingArea.isFilled(1, 1));
+        assertFalse(gamingArea.isFilled(0, 1));
         assertFalse(gamingArea.isFilled(1, 0));
-        assertFalse(gamingArea.isFilled(2, 0));
+        assertFalse(gamingArea.isFilled(3, 0));
+        assertFalse(gamingArea.isFilled(4, 0));
+        assertFalse(gamingArea.isFilled(2, 1));
+        assertFalse(gamingArea.isFilled(3, 1));
+        assertFalse(gamingArea.isFilled(4, 1));
     }
 
 
