@@ -93,10 +93,10 @@ public class GamingArea {
         int maxHeight = 0;
 
         label:
-        for (int y = row - 1; y >= 0; y--) {
+        for (int y_ = row - 1; y_ >= 0; y_--) {
             for (int x = col; x < col + shape.getWidth(); x++) {
-                if (board[x][y]) {
-                    maxHeight = y;
+                if (cache[x][y_]) {
+                    maxHeight = y_+1;
                     break label;
                 }
             }
@@ -104,16 +104,17 @@ public class GamingArea {
 
         int target = 0;
 
-        for (int y = maxHeight + shape.getHeight() - 1; y >= maxHeight - shape.getHeight() + 2; y--) {
+        for (int y = maxHeight ; y >= maxHeight - shape.getHeight()+1; y--) {
+            System.out.println(y);
             if (y < 0) {
                 return target;
             }
-            target = y - 1 + shape.getHeight();
             for (Point point : shape.getPoints()) {
                 if (isFilled(point.x + col, point.y + y)) {
                     return target;
                 }
             }
+            target = y;
         }
         return target;
     }
