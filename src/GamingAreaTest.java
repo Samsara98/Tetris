@@ -119,7 +119,7 @@ public class GamingAreaTest {
         Shape t3 = new Shape("0 0  0 1  0 2  1 2");
 
         gamingArea.place(t, 0, 8);
-
+        System.out.println(gamingArea);
         assertEquals(1, gamingArea.getDropHeight(t, 0));
         gamingArea.undo();
 
@@ -198,7 +198,6 @@ public class GamingAreaTest {
         gamingArea.undo();
         assertEquals(0, gamingArea.place(t, 0, 8));
         gamingArea.undo();
-        System.out.println(gamingArea);
         assertEquals(2, gamingArea.place(t, 0, 9));
         gamingArea.undo();
         assertEquals(2, gamingArea.place(t, 0, 10));
