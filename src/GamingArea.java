@@ -194,7 +194,7 @@ public class GamingArea {
         // TODO
         //调用place成功使游戏区变脏
         committed = false;
-        if (col + shape.getWidth() - 1 > width || col < 0 || row < 0) {
+        if (col + shape.getWidth() - 1 >= width || shape.getHeight() + row - 1 >= height || col < 0 || row < 0) {
             return OUT;
         }
 
