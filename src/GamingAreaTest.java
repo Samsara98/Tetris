@@ -1,8 +1,13 @@
+import jdk.swing.interop.SwingInterOpUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
 
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -33,7 +38,6 @@ public class GamingAreaTest {
         t2 = new Shape("0 1  1 0  1 1  1 2");
 
 
-
     }
 
 
@@ -57,7 +61,7 @@ public class GamingAreaTest {
         gamingArea2.commit();
         Shape testBoard = new Shape("0 0 ");
         gamingArea2.place(testBoard, 0, 0);
-        assertEquals(0, gamingArea2.getMaxHeight());
+        assertEquals(1, gamingArea2.getMaxHeight());
         gamingArea2.commit();
         assertEquals(1, gamingArea2.getMaxHeight());
 
@@ -68,7 +72,8 @@ public class GamingAreaTest {
         gamingArea.undo();
 
         gamingArea.place(t, 0, 9);
-        assertEquals(4, gamingArea.getMaxHeight());
+        System.out.println(gamingArea);
+        assertEquals(10, gamingArea.getMaxHeight());
         gamingArea.commit();
         assertEquals(10, gamingArea.getMaxHeight());
         gamingArea.undo();
@@ -101,7 +106,7 @@ public class GamingAreaTest {
         assertEquals(2, gamingArea.getColumnHeight(4));
 
         assertEquals(2, gamingArea.getColumnHeight(0));
-        gamingArea.place(t,0,8);
+        gamingArea.place(t, 0, 8);
         assertEquals(10, gamingArea.getColumnHeight(0));
     }
 
@@ -113,19 +118,19 @@ public class GamingAreaTest {
         Shape t2 = new Shape("0 1  1 0  1 1  1 2");
         Shape t3 = new Shape("0 0  0 1  0 2  1 2");
 
-        gamingArea.place(t,0,8);
+        gamingArea.place(t, 0, 8);
         assertEquals(1, gamingArea.getDropHeight(t, 0));
         gamingArea.undo();
 
-        gamingArea.place(t,1,8);
+        gamingArea.place(t, 1, 8);
         gamingArea.undo();
         assertEquals(2, gamingArea.getDropHeight(t2, 1));
 
-        gamingArea.place(t2,0,1);
+        gamingArea.place(t2, 0, 1);
         gamingArea.clearRows();
         gamingArea.commit();
 
-        gamingArea.place(t,0,6);
+        gamingArea.place(t, 0, 6);
         gamingArea.commit();
 //        gamingArea.place(t,0,4);
         assertEquals(8, gamingArea.getDropHeight(t, 0));
@@ -170,6 +175,7 @@ public class GamingAreaTest {
         assertFalse(gamingArea.isFilled(1, 12));
         assertTrue(gamingArea.isFilled(100, 100));
     }
+
 
     @Test
     public void placeTest() {
@@ -314,5 +320,35 @@ public class GamingAreaTest {
         gamingArea.clearRows();
         areaEquals(gamingArea, gamingArea3);
     }
+
+
+    @Test
+    public void a() {
+
+        int[] customers = new int[]{1, 0, 1, 2, 1, 1, 7, 5};
+        int[] grumpy = new int[]{0, 1, 0, 1, 0, 1, 0, 1};
+        int X = 3;
+
+
+        int satisfaction = 0;
+        for (int i = 0; i < customers.length; i++) {
+            if (grumpy[i] == 0) {
+                satisfaction += customers[i];
+            }
+        }
+
+        int increase = 0;
+        for (int i = 0; i < X; i++) {
+            increase += customers[i] * grumpy[i];
+        }
+        int maxIncrease = increase;
+
+        for (int i = 1; i <= customers.length - X; i++) {
+            increase = increase - customers[i - 1] * grumpy[i - 1] + customers[i + X-1] * grumpy[i + X-1];
+            maxIncrease = Math.max(increase, maxIncrease);
+        }
+        System.out.println(satisfaction + maxIncrease);
+    }
+
 
 }

@@ -59,7 +59,7 @@ public class GamingArea {
 
         for (int y = height - 1; y >= 0; y--) {
             for (int x = 0; x < width; x++) {
-                if (cache[x][y]) {
+                if (board[x][y]) {
                     return y + 1;
                 }
             }
@@ -192,10 +192,6 @@ public class GamingArea {
         // sanity check
         if (!committed) {
             throw new RuntimeException("未commit时调用place");
-        }
-
-        if (null == shape) {
-            return COLLIDED;
         }
 
         // TODO
