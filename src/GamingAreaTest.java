@@ -133,12 +133,12 @@ public class GamingAreaTest {
         gamingArea.place(t, 0, 5);
         gamingArea.commit();
 //        gamingArea.place(t,0,4);
+        System.out.println(gamingArea);
         assertEquals(7, gamingArea.getDropHeight(t, 0));
         gamingArea.undo();
-
+        System.out.println(gamingArea);
 //        gamingArea.place(t3,2,4);
         assertEquals(7, gamingArea.getDropHeight(t3, 2));
-        System.out.println(gamingArea);
         assertEquals(6, gamingArea.getDropHeight(t, 2));
     }
 
