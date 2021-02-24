@@ -3,15 +3,12 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 import static org.junit.Assert.*;
 
 public class GamingAreaTest {
 
-    Logger logger = LoggerFactory.getLogger(getClass());
     GamingArea gamingArea = new GamingArea(5, 10);
     Shape t;
     Shape t2;
