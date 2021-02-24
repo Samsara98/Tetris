@@ -121,7 +121,7 @@ public class GamingAreaTest {
         gamingArea.place(t, 0, 8);
         System.out.println(gamingArea);
         assertEquals(1, gamingArea.getDropHeight(t, 0));
-        gamingArea.undo();
+
 
         gamingArea.place(t, 1, 8);
         gamingArea.undo();
