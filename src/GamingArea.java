@@ -82,13 +82,13 @@ public class GamingArea {
         }
 
         int row = height;
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                if (board[x][y] != cache[x][y] && y < row) {
-                    row = y;
-                }
-            }
-        }
+//        for (int x = 0; x < width; x++) {
+//            for (int y = 0; y < height; y++) {
+//                if (board[x][y] != cache[x][y] && y < row) {
+//                    row = y;
+//                }
+//            }
+//        }
 
         int maxHeight = 0;
 
@@ -96,7 +96,7 @@ public class GamingArea {
         for (int y_ = row - 1; y_ >= 0; y_--) {
             for (int x = col; x < col + shape.getWidth(); x++) {
                 if (cache[x][y_]) {
-                    maxHeight = y_+1;
+                    maxHeight = y_ + 1;
                     break label;
                 }
             }
@@ -104,7 +104,7 @@ public class GamingArea {
 
         int target = 0;
 
-        for (int y = maxHeight ; y >= maxHeight - shape.getHeight()+1; y--) {
+        for (int y = maxHeight; y >= maxHeight - shape.getHeight() + 1; y--) {
             if (y < 0) {
                 return target;
             }
@@ -163,11 +163,8 @@ public class GamingArea {
      */
     public boolean isFilled(int col, int row) {
 
-        if (col >= width || col < 0 || row < 0)
+        if (col >= width || row >= height || col < 0 || row < 0)
             return true;
-        if (row >= height) {
-            return false;
-        }
         return board[col][row];
     }
 

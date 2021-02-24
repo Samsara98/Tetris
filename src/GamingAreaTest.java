@@ -67,14 +67,15 @@ public class GamingAreaTest {
         gamingArea.undo();
 
         gamingArea.place(t, 0, 9);
-        assertEquals(10, gamingArea.getMaxHeight());
+        System.out.println(gamingArea);
+        assertEquals(4, gamingArea.getMaxHeight());
         gamingArea.commit();
-        assertEquals(10, gamingArea.getMaxHeight());
+        assertEquals(4, gamingArea.getMaxHeight());
         gamingArea.undo();
 
         gamingArea.place(t, 0, 10);
         gamingArea.commit();
-        assertEquals(10, gamingArea.getMaxHeight());
+        assertEquals(4, gamingArea.getMaxHeight());
         gamingArea.undo();
     }
 
@@ -124,14 +125,15 @@ public class GamingAreaTest {
         gamingArea.clearRows();
         gamingArea.commit();
 
-        gamingArea.place(t, 0, 6);
+        gamingArea.place(t, 0, 5);
         gamingArea.commit();
 //        gamingArea.place(t,0,4);
-        assertEquals(8, gamingArea.getDropHeight(t, 0));
+        assertEquals(7, gamingArea.getDropHeight(t, 0));
         gamingArea.undo();
 
 //        gamingArea.place(t3,2,4);
-        assertEquals(8, gamingArea.getDropHeight(t3, 2));
+        System.out.println(gamingArea);
+        assertEquals(7, gamingArea.getDropHeight(t3, 2));
 
     }
 
@@ -164,9 +166,9 @@ public class GamingAreaTest {
         assertTrue(gamingArea.isFilled(-1, 1));
         assertTrue(gamingArea.isFilled(-1, -1));
         assertFalse(gamingArea.isFilled(1, 9));
-        assertFalse(gamingArea.isFilled(1, 10));
-        assertFalse(gamingArea.isFilled(1, 11));
-        assertFalse(gamingArea.isFilled(1, 12));
+        assertTrue(gamingArea.isFilled(1, 10));
+        assertTrue(gamingArea.isFilled(1, 11));
+        assertTrue(gamingArea.isFilled(1, 12));
         assertTrue(gamingArea.isFilled(100, 100));
     }
 
@@ -190,9 +192,9 @@ public class GamingAreaTest {
         gamingArea.undo();
         assertEquals(0, gamingArea.place(t, 0, 8));
         gamingArea.undo();
-        assertEquals(0, gamingArea.place(t, 0, 9));
+        assertEquals(3, gamingArea.place(t, 0, 9));
         gamingArea.undo();
-        assertEquals(0, gamingArea.place(t, 0, 10));
+        assertEquals(3, gamingArea.place(t, 0, 10));
         gamingArea.undo();
 
 
