@@ -67,7 +67,6 @@ public class GamingAreaTest {
         gamingArea.undo();
 
         gamingArea.place(t, 0, 9);
-        System.out.println(gamingArea);
         assertEquals(4, gamingArea.getMaxHeight());
         gamingArea.commit();
         assertEquals(4, gamingArea.getMaxHeight());
@@ -87,6 +86,10 @@ public class GamingAreaTest {
         assertEquals(4, gamingArea.getFilledBlockCount(1));
         assertEquals(0, gamingArea.getFilledBlockCount(2));
         assertEquals(0, gamingArea.getFilledBlockCount(3));
+
+        gamingArea.place(t,0,1);
+        assertEquals(5, gamingArea.getFilledBlockCount(1));
+        assertEquals(3, gamingArea.getFilledBlockCount(2));
     }
 
 
@@ -103,6 +106,8 @@ public class GamingAreaTest {
         assertEquals(2, gamingArea.getColumnHeight(0));
         gamingArea.place(t, 0, 8);
         assertEquals(10, gamingArea.getColumnHeight(0));
+        assertEquals(10, gamingArea.getColumnHeight(1));
+        assertEquals(10, gamingArea.getColumnHeight(2));
     }
 
 
@@ -132,9 +137,9 @@ public class GamingAreaTest {
         gamingArea.undo();
 
 //        gamingArea.place(t3,2,4);
-        System.out.println(gamingArea);
         assertEquals(7, gamingArea.getDropHeight(t3, 2));
-
+        System.out.println(gamingArea);
+        assertEquals(6, gamingArea.getDropHeight(t, 2));
     }
 
 
@@ -316,5 +321,6 @@ public class GamingAreaTest {
         gamingArea.clearRows();
         areaEquals(gamingArea, gamingArea3);
     }
+
 
 }
