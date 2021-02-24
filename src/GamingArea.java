@@ -105,7 +105,6 @@ public class GamingArea {
         int target = 0;
 
         for (int y = maxHeight ; y >= maxHeight - shape.getHeight()+1; y--) {
-            System.out.println(y);
             if (y < 0) {
                 return target;
             }
