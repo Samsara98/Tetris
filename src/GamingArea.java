@@ -15,10 +15,10 @@ public class GamingArea {
 
     public GamingArea(int width, int height) {
 
-        this.width = width;
-        this.height = height;
-        board = new boolean[width][height];
-        cache = new boolean[width][height];
+        this.width = Math.abs(width);
+        this.height = Math.abs(height);
+        board = new boolean[this.width][this.height];
+        cache = new boolean[this.width][this.height];
         arrayCopy(cache, board);
         committed = true;
 
@@ -77,6 +77,9 @@ public class GamingArea {
      */
     public int getDropHeight(Shape shape, int col) {
         // TODO
+        if (col >= width || col < 0) {
+            return 0;
+        }
         if (null == shape) {
             return 0;
         }
@@ -100,6 +103,9 @@ public class GamingArea {
                     break label;
                 }
             }
+        }
+        if(maxHeight + shape.getHeight()-1 >= height){
+            return maxHeight;
         }
 
         int target = 0;
@@ -125,7 +131,7 @@ public class GamingArea {
      */
     public int getColumnHeight(int col) {
 
-        if (col > width || col < 0) {
+        if (col >= width || col < 0) {
             return 0;
         }
         for (int y = height - 1; y >= 0; y--) {
@@ -142,7 +148,9 @@ public class GamingArea {
      * 某一行已经填上方块的个数
      */
     public int getFilledBlockCount(int row) {
-
+        if (row >= height || row < 0) {
+            return 0;
+        }
         int rowNum = 0;
         if (row > height || row < 0) {
             return rowNum;

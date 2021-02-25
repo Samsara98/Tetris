@@ -119,13 +119,12 @@ public class GamingAreaTest {
         Shape t3 = new Shape("0 0  0 1  0 2  1 2");
 
         gamingArea.place(t, 0, 8);
-        System.out.println(gamingArea);
         assertEquals(1, gamingArea.getDropHeight(t, 0));
-
-
-        gamingArea.place(t, 1, 8);
         gamingArea.undo();
-        assertEquals(2, gamingArea.getDropHeight(t2, 1));
+
+        gamingArea.place(t, 0, 8);
+        gamingArea.undo();
+        assertEquals(1, gamingArea.getDropHeight(t, 0));
 
         gamingArea.place(t2, 0, 1);
         gamingArea.clearRows();
@@ -141,6 +140,7 @@ public class GamingAreaTest {
 //        gamingArea.place(t3,2,4);
         assertEquals(7, gamingArea.getDropHeight(t3, 2));
         assertEquals(6, gamingArea.getDropHeight(t, 2));
+        System.out.println(gamingArea);
     }
 
 
@@ -294,9 +294,10 @@ public class GamingAreaTest {
 
         Shape t2 = new Shape("0 1  1 0  1 1  2 1  3 1  4 1");
 
-        Shape testBoard2 = new Shape("1 0  3 0  4 0");
+        Shape testBoard2 = new Shape("0 0  2 0  3 0");
         GamingArea gamingArea2 = new GamingArea(5, 10);
-        gamingArea2.place(testBoard2, 0, 0);
+        gamingArea2.place(testBoard2, 1, 0);
+        System.out.println(gamingArea2);
         gamingArea.place(t2, 0, 1);
         gamingArea.clearRows();
         areaEquals(gamingArea, gamingArea2);
