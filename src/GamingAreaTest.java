@@ -1,8 +1,8 @@
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
-
 
 
 import static org.junit.Assert.*;
@@ -14,7 +14,7 @@ public class GamingAreaTest {
     Shape t2;
 
     @Rule
-    public Timeout timeout = Timeout.millis(100);
+    public Timeout timeout = new Timeout(100);
 
 
     @Before
@@ -48,7 +48,6 @@ public class GamingAreaTest {
     @Test
     public void getMaxHeightTest() {
 
-        assertTrue(gamingArea.getMaxHeight()>=0 && gamingArea.getMaxHeight()<=10);
         //空场景高度为0
         GamingArea gamingArea2 = new GamingArea(5, 10);
         assertEquals(0, gamingArea2.getMaxHeight());
@@ -83,36 +82,26 @@ public class GamingAreaTest {
     @Test
     public void getFilledBlockCountTest() {
 
-        assertEquals(0,gamingArea.getFilledBlockCount(-1));
         assertEquals(3, gamingArea.getFilledBlockCount(0));
         assertEquals(4, gamingArea.getFilledBlockCount(1));
         assertEquals(0, gamingArea.getFilledBlockCount(2));
         assertEquals(0, gamingArea.getFilledBlockCount(3));
-        assertEquals(0,gamingArea.getFilledBlockCount(10));
 
         gamingArea.place(t,0,1);
         assertEquals(5, gamingArea.getFilledBlockCount(1));
         assertEquals(3, gamingArea.getFilledBlockCount(2));
-        gamingArea = new GamingArea(5,1);
-
-        for(int i=0;i<10;i++)
-        {
-            assertEquals(0,gamingArea.getFilledBlockCount(i));
-            assertTrue(gamingArea.getFilledBlockCount(i)>=0 && gamingArea.getFilledBlockCount(i)<=10);
-        }
     }
 
 
     @Test
     public void getColumnHeightTest() {
 
-        assertEquals(0, gamingArea.getColumnHeight(-1));
+
         assertEquals(2, gamingArea.getColumnHeight(0));
         assertEquals(1, gamingArea.getColumnHeight(1));
         assertEquals(2, gamingArea.getColumnHeight(2));
         assertEquals(2, gamingArea.getColumnHeight(3));
         assertEquals(2, gamingArea.getColumnHeight(4));
-        assertEquals(0, gamingArea.getColumnHeight(10));
 
         assertEquals(2, gamingArea.getColumnHeight(0));
         gamingArea.place(t, 0, 8);
@@ -128,10 +117,6 @@ public class GamingAreaTest {
         Shape t = new Shape("0 1  1 0  1 1  2 1");
         Shape t2 = new Shape("0 1  1 0  1 1  1 2");
         Shape t3 = new Shape("0 0  0 1  0 2  1 2");
-        Shape t4 = new Shape("0 2  1 1  1 0  1 2");
-
-        assertEquals(0, gamingArea.getDropHeight(t, -1));
-        assertEquals(0, gamingArea.getDropHeight(t, 10));
 
         gamingArea.place(t, 0, 8);
         assertEquals(1, gamingArea.getDropHeight(t, 0));
@@ -153,10 +138,9 @@ public class GamingAreaTest {
         gamingArea.undo();
 
 //        gamingArea.place(t3,2,4);
-        System.out.println(gamingArea);
         assertEquals(7, gamingArea.getDropHeight(t3, 2));
         assertEquals(6, gamingArea.getDropHeight(t, 2));
-//        assertEquals(5, gamingArea.getDropHeight(t4, 2));
+        System.out.println(gamingArea);
     }
 
 
@@ -189,7 +173,6 @@ public class GamingAreaTest {
         assertTrue(gamingArea.isFilled(-1, -1));
         assertFalse(gamingArea.isFilled(1, 9));
         assertTrue(gamingArea.isFilled(1, 10));
-        assertTrue(gamingArea.isFilled(5, 10));
         assertTrue(gamingArea.isFilled(1, 11));
         assertTrue(gamingArea.isFilled(1, 12));
         assertTrue(gamingArea.isFilled(100, 100));
@@ -208,20 +191,20 @@ public class GamingAreaTest {
         areaEquals(gamingArea1, gamingArea);
         gamingArea.undo();
 
-        assertEquals(GamingArea.OK, gamingArea.place(l, 1, 2));
+        assertEquals(0, gamingArea.place(l, 1, 2));
         gamingArea.undo();
 
-        assertEquals(GamingArea.OK, gamingArea.place(t, 2, 2));
+        assertEquals(0, gamingArea.place(t, 2, 2));
         gamingArea.undo();
-        assertEquals(GamingArea.OK, gamingArea.place(t, 0, 8));
+        assertEquals(0, gamingArea.place(t, 0, 8));
         gamingArea.undo();
-        assertEquals(GamingArea.OUT, gamingArea.place(t, 0, 9));
+        assertEquals(2, gamingArea.place(t, 0, 9));
         gamingArea.undo();
-        assertEquals(GamingArea.OUT, gamingArea.place(t, 0, 10));
+        assertEquals(2, gamingArea.place(t, 0, 10));
         gamingArea.undo();
 
 
-        assertEquals(GamingArea.ROW_FULL, gamingArea.place(t, 0, 1));
+        assertEquals(1, gamingArea.place(t, 0, 1));
         assertFalse(gamingArea.committed);
         try {
             gamingArea.place(t, 4, 0);
@@ -230,32 +213,26 @@ public class GamingAreaTest {
         }
         gamingArea.undo();
 
-        assertEquals(GamingArea.OUT, gamingArea.place(t, 4, 0));
+        assertEquals(2, gamingArea.place(t, 4, 0));
         gamingArea.undo();
-        assertEquals(GamingArea.OUT, gamingArea.place(t, -1, 0));
+        assertEquals(2, gamingArea.place(t, -1, 0));
         gamingArea.undo();
-        assertEquals(GamingArea.OUT, gamingArea.place(t, 0, -1));
+        assertEquals(2, gamingArea.place(t, 0, -1));
         gamingArea.undo();
-        assertEquals(GamingArea.OUT, gamingArea.place(l, -3, 0));
-        gamingArea.undo();
-        assertEquals(GamingArea.OUT, gamingArea.place(l, 5, 10));
-        gamingArea.undo();
-        assertEquals(GamingArea.OUT, gamingArea.place(l, 5, 0));
-        gamingArea.undo();
-        assertEquals(GamingArea.OUT, gamingArea.place(l, 0, 10));
+        assertEquals(2, gamingArea.place(l, -3, 0));
         gamingArea.undo();
 
-        assertEquals(GamingArea.COLLIDED, gamingArea.place(t, 0, 0));
+        assertEquals(3, gamingArea.place(t, 0, 0));
         gamingArea.undo();
-        assertEquals(GamingArea.COLLIDED, gamingArea.place(t, 1, 0));
+        assertEquals(3, gamingArea.place(t, 1, 0));
         gamingArea.undo();
-        assertEquals(GamingArea.COLLIDED, gamingArea.place(t, 2, 1));
+        assertEquals(3, gamingArea.place(t, 2, 1));
         gamingArea.undo();
-        assertEquals(GamingArea.COLLIDED, gamingArea.place(t, 2, 0));
+        assertEquals(3, gamingArea.place(t, 2, 0));
         gamingArea.undo();
-        assertEquals(GamingArea.COLLIDED, gamingArea.place(l, 0, 0));
+        assertEquals(3, gamingArea.place(l, 0, 0));
         gamingArea.undo();
-        assertEquals(GamingArea.COLLIDED, gamingArea.place(l, 0, 1));
+        assertEquals(3, gamingArea.place(l, 0, 1));
         gamingArea.undo();
 
     }
@@ -277,47 +254,15 @@ public class GamingAreaTest {
         GamingArea gamingArea1 = new GamingArea(5, 10);
         Shape testBoard = new Shape("1 0  2 1  0 1  3 0  3 1  4 0  4 1");
         gamingArea1.place(testBoard, 0, 0);
-        System.out.println(gamingArea1);
 
-        assertEquals(0,gamingArea.getFilledBlockCount(3));
-        assertEquals(2,gamingArea.getColumnHeight(2));
-        assertEquals(2,gamingArea.getMaxHeight());
-        assertEquals(1,gamingArea.getDropHeight(t,0));
-
-        assertEquals(GamingArea.OK,gamingArea.place(t, 2, 2));
-        System.out.println(gamingArea);
-
-        assertEquals(3,gamingArea.getFilledBlockCount(3));
-        assertEquals(4,gamingArea.getColumnHeight(2));
-        assertEquals(4,gamingArea.getMaxHeight());
-
+        gamingArea.place(t, 2, 2);
         assertFalse(gamingArea.committed);
         gamingArea.undo();
-
-        assertEquals(0,gamingArea.getFilledBlockCount(3));
-        assertEquals(2,gamingArea.getColumnHeight(2));
-        assertEquals(2,gamingArea.getMaxHeight());
-        assertEquals(1,gamingArea.getDropHeight(t,0));
-
         assertTrue(gamingArea.committed);
         areaEquals(gamingArea1, gamingArea);
-        //多次undo
+
         gamingArea.undo();
         areaEquals(gamingArea1, gamingArea);
-
-        assertEquals(GamingArea.ROW_FULL,gamingArea.place(t, 0, 1));
-        gamingArea.undo();
-        areaEquals(gamingArea1, gamingArea);
-
-        assertEquals(GamingArea.OUT,gamingArea.place(t, 4, 2));
-        gamingArea.undo();
-        areaEquals(gamingArea1, gamingArea);
-
-        assertEquals(GamingArea.COLLIDED,gamingArea.place(t, 0, 0));
-        gamingArea.undo();
-        areaEquals(gamingArea1, gamingArea);
-
-
     }
 
 
@@ -336,14 +281,10 @@ public class GamingAreaTest {
 
         Shape testBoard = new Shape("1 0  3 0  4 0  0 1  1 1  2 1");
         GamingArea gamingArea1 = new GamingArea(5, 10);
-        assertEquals(0,gamingArea1.clearRows());
-        assertEquals(0,gamingArea.clearRows());
-
         gamingArea1.place(testBoard, 0, 0);
         gamingArea.place(t, 0, 1);
-        assertEquals(1,gamingArea.clearRows());
+        gamingArea.clearRows();
         areaEquals(gamingArea, gamingArea1);
-
 
     }
 
@@ -351,14 +292,14 @@ public class GamingAreaTest {
     @Test
     public void clearTest2() {
 
-        Shape t2 = new Shape("0 1  0 3  1 0  1 1  2 1  2 2  3 1  4 1");
+        Shape t2 = new Shape("0 1  1 0  1 1  2 1  3 1  4 1");
 
-        Shape testBoard2 = new Shape("0 2  1 0  2 1  3 0  4 0");
+        Shape testBoard2 = new Shape("0 0  2 0  3 0");
         GamingArea gamingArea2 = new GamingArea(5, 10);
-        gamingArea2.place(testBoard2, 0, 0);
-
+        gamingArea2.place(testBoard2, 1, 0);
+        System.out.println(gamingArea2);
         gamingArea.place(t2, 0, 1);
-        assertEquals(2,gamingArea.clearRows());
+        gamingArea.clearRows();
         areaEquals(gamingArea, gamingArea2);
     }
 
@@ -379,23 +320,9 @@ public class GamingAreaTest {
         gamingArea.place(l2, 0, 3);
         gamingArea.commit();
         gamingArea.place(l, 1, 1);   //多行消除
-        assertEquals(3,gamingArea.clearRows());
+        gamingArea.clearRows();
         areaEquals(gamingArea, gamingArea3);
     }
 
-    @Test
-    public void clearTest4() {
-
-        Shape l = new Shape("0 0  1 0  2 0  3 0  4 0");
-
-        GamingArea gamingArea3 = new GamingArea(5, 10);
-        gamingArea = new GamingArea(5, 10);
-        assertEquals(GamingArea.OK,gamingArea3.place(t,0,0));
-        assertEquals(GamingArea.OK,gamingArea.place(t,0,0));
-        gamingArea.commit();
-        assertEquals(GamingArea.ROW_FULL,gamingArea.place(l,0,9));
-        assertEquals(1,gamingArea.clearRows());
-        areaEquals(gamingArea, gamingArea3);
-    }
 
 }
