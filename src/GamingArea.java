@@ -148,11 +148,9 @@ public class GamingArea {
      * 某一行已经填上方块的个数
      */
     public int getFilledBlockCount(int row) {
-        if (row >= height || row < 0) {
-            return 0;
-        }
+
         int rowNum = 0;
-        if (row > height || row < 0) {
+        if (row >= height || row < 0) {
             return rowNum;
         }
         for (int x = 0; x < width; x++) {
