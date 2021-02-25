@@ -1,12 +1,9 @@
-
-import com.sun.security.jgss.GSSUtil;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
 
 
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
 
@@ -92,7 +89,6 @@ public class GamingAreaTest {
         assertEquals(0, gamingArea.getFilledBlockCount(2));
         assertEquals(0, gamingArea.getFilledBlockCount(3));
         assertEquals(0,gamingArea.getFilledBlockCount(10));
-        assertEquals(0,gamingArea.getFilledBlockCount(11));
 
         gamingArea.place(t,0,1);
         assertEquals(5, gamingArea.getFilledBlockCount(1));
@@ -117,7 +113,6 @@ public class GamingAreaTest {
         assertEquals(2, gamingArea.getColumnHeight(3));
         assertEquals(2, gamingArea.getColumnHeight(4));
         assertEquals(0, gamingArea.getColumnHeight(10));
-        assertEquals(0, gamingArea.getColumnHeight(11));
 
         assertEquals(2, gamingArea.getColumnHeight(0));
         gamingArea.place(t, 0, 8);
@@ -137,7 +132,6 @@ public class GamingAreaTest {
 
         assertEquals(0, gamingArea.getDropHeight(t, -1));
         assertEquals(0, gamingArea.getDropHeight(t, 10));
-        assertEquals(0, gamingArea.getDropHeight(t, 11));
 
         gamingArea.place(t, 0, 8);
         assertEquals(1, gamingArea.getDropHeight(t, 0));
