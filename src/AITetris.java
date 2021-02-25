@@ -16,8 +16,8 @@ public class AITetris extends Tetris implements AI {
             gamingArea.undo();
             Move move = calculateBestMove(gamingArea, currentShape);
             if(null != move){
-                newX = move.x;
-                newY = move.y;
+                currentX = move.x;
+                currentY = move.y;
                 currentShape = move.shape;
             }
             super.tick(direction);
