@@ -156,7 +156,7 @@ public class GamingAreaTest {
         System.out.println(gamingArea);
         assertEquals(7, gamingArea.getDropHeight(t3, 2));
         assertEquals(6, gamingArea.getDropHeight(t, 2));
-        assertEquals(5, gamingArea.getDropHeight(t4, 2));
+//        assertEquals(5, gamingArea.getDropHeight(t4, 2));
     }
 
 
@@ -379,7 +379,22 @@ public class GamingAreaTest {
         gamingArea.place(l2, 0, 3);
         gamingArea.commit();
         gamingArea.place(l, 1, 1);   //多行消除
-        gamingArea.clearRows();
+        assertEquals(3,gamingArea.clearRows());
+        areaEquals(gamingArea, gamingArea3);
+    }
+
+    @Test
+    public void clearTest4() {
+
+        Shape l = new Shape("0 0  1 0  2 0  3 0  4 0");
+
+        GamingArea gamingArea3 = new GamingArea(5, 10);
+        gamingArea = new GamingArea(5, 10);
+        assertEquals(GamingArea.OK,gamingArea3.place(t,0,0));
+        assertEquals(GamingArea.OK,gamingArea.place(t,0,0));
+        gamingArea.commit();
+        assertEquals(GamingArea.ROW_FULL,gamingArea.place(l,0,9));
+        assertEquals(1,gamingArea.clearRows());
         areaEquals(gamingArea, gamingArea3);
     }
 
