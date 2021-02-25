@@ -21,7 +21,6 @@ public class AITetris extends Tetris implements AI {
                 currentShape = move.shape;
                 score = (int) move.score;
             }
-            super.tick(direction);
         }
 
     }
