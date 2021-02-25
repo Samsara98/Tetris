@@ -216,8 +216,8 @@ public class GamingArea {
             }
         }
 
-        for (int y = 0; y < height; y++) {
-            if (getFilledBlockCount(y) == width) {
+        for (int y = 0; y < shape.getHeight(); y++) {
+            if (getFilledBlockCount(y+row) == width) {
                 return ROW_FULL;
             }
         }

@@ -3,8 +3,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
 
-
-
 import static org.junit.Assert.*;
 
 public class GamingAreaTest {
@@ -257,6 +255,15 @@ public class GamingAreaTest {
         gamingArea.undo();
         assertEquals(GamingArea.COLLIDED, gamingArea.place(l, 0, 1));
         gamingArea.undo();
+
+        Shape shape00 = new Shape("0 0");
+        assertEquals(GamingArea.OK, gamingArea.place(shape00, 0, 0));
+        gamingArea.commit();
+        assertEquals(GamingArea.ROW_FULL, gamingArea.place(shape00, 2, 0));
+        gamingArea.commit();
+        System.out.println(gamingArea);
+        assertEquals(GamingArea.OK, gamingArea.place(t, 1, 2));
+
 
     }
 
