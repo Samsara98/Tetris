@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Random;
 
 public class AITetris extends Tetris implements AI {
@@ -72,7 +74,16 @@ public class AITetris extends Tetris implements AI {
 
         random = new Random(); // 用于让形状随机出现
         debugButton = new JCheckBox("debug");
-        debugButton.addActionListener(e -> random.setSeed(0));
+        ActionListener actionListener = new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                if(debugButton.isSelected()) {
+                    random.setSeed(0);
+                }else {
+                    random.setSeed(System.currentTimeMillis());
+                }
+            }
+        };
+        debugButton.addActionListener(actionListener);
         panel.add(debugButton);
 
         return panel;
