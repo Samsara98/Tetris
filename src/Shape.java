@@ -152,12 +152,12 @@ public class Shape {
         if (Shape.shapes == null) {
             Shape.shapes = new Shape[]{
                     makeFastRotations(new Shape(I_STR)),
+                    makeFastRotations(new Shape(O_STR)),
                     makeFastRotations(new Shape(L_STR)),
                     makeFastRotations(new Shape(J_STR)),
+                    makeFastRotations(new Shape(T_STR)),
                     makeFastRotations(new Shape(S_STR)),
                     makeFastRotations(new Shape(Z_STR)),
-                    makeFastRotations(new Shape(O_STR)),
-                    makeFastRotations(new Shape(T_STR)),
             };
         }
         return Shape.shapes;
