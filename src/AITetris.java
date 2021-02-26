@@ -1,7 +1,4 @@
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Random;
 
 public class AITetris extends Tetris implements AI {
@@ -37,15 +34,27 @@ public class AITetris extends Tetris implements AI {
 
     }
 
+
+    @Override
+    public JPanel createControlPanel() {
+
+        JPanel panel = super.createControlPanel();
+        random = new Random(); // 用于让形状随机出现
+        debugButton = new JCheckBox("debug");
+        panel.add(debugButton);
+        return panel;
+    }
+
+
     @Override
     public void startGame() {
 
         count = 0;
         score = 0;
         gameOn = true;
-        if(debugButton.isSelected()){
+        if (debugButton.isSelected()) {
             random.setSeed(0);
-        }else {
+        } else {
             random = new Random();
         }
         startTime = System.currentTimeMillis();
@@ -60,16 +69,20 @@ public class AITetris extends Tetris implements AI {
         repaint();
     }
 
+
     @Override
-    public JPanel createControlPanel() {
+    public Shape pickNextShape() {
 
-        JPanel panel = super.createControlPanel();
-        random = new Random(); // 用于让形状随机出现
-        debugButton = new JCheckBox("debug");
-        panel.add(debugButton);
-
-
-        return panel;
+        int maxScore = 0;
+        Shape bad = new Shape("0 0");
+        for (Shape shape : shapes) {
+            Move move = calculateBestMove(gamingArea, shape);
+            if((int)move.score > maxScore){
+                maxScore = Math.max(maxScore,(int)move.score);
+                bad = move.shape;
+            }
+        }
+        return bad;
     }
 
 
