@@ -5,7 +5,6 @@ import java.util.Random;
 public class AITetris extends Tetris implements AI {
 
     JCheckBox debugButton = new JCheckBox();
-    Random random = new Random();
 
     AITetris(int pixels) {
 
