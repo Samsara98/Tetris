@@ -95,7 +95,7 @@ public class Tetris extends JComponent {
         count = 0;
         score = 0;
         gameOn = true;
-        //random = new Random(); // 用于让形状随机出现
+        random = new Random(); // 用于让形状随机出现
         startTime = System.currentTimeMillis();
         timer.start();
 
