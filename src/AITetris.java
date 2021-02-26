@@ -70,13 +70,31 @@ public class AITetris extends Tetris implements AI {
         quitButton.addActionListener(e -> System.exit(0));
         panel.add(quitButton);
 
-        debugButton = new JCheckBox("0");
+        random = new Random(); // 用于让形状随机出现
+        debugButton = new JCheckBox("debug");
         debugButton.addActionListener(e -> random.setSeed(0));
         panel.add(debugButton);
 
         return panel;
     }
 
+    @Override
+    public void startGame() {
+
+        count = 0;
+        score = 0;
+        gameOn = true;
+        startTime = System.currentTimeMillis();
+        timer.start();
+
+        gamingArea = new GamingArea(WIDTH, HEIGHT + TOP_SPACE);
+        updateCounters();
+        toggleButtons();
+        timeLabel.setText(" ");
+        addNewShape();
+
+        repaint();
+    }
 
     public static void main(String[] args) {
         // boilerplate code
