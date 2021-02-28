@@ -25,22 +25,33 @@ public class AITetris extends Tetris implements AI {
     @Override
     public void tick(int direction) {
 
-        if(AIButton.isSelected()){
+        if (AIButton.isSelected()) {
             super.tick(direction);
             if (direction == DOWN) {
                 gamingArea.undo();
 //                Move move = calculateBestMove(gamingArea, currentShape);
                 if (null != move) {
-                    if (!currentShape.equals(move.shape)){
+                    if (!currentShape.equals(move.shape)) {
+                        delay();
                         super.tick(ROTATE);
                     }
                     if (move.x > newX) {
                         delay();
                         super.tick(RIGHT);
-                    } else if (move.x < newX) {
+                    }
+                    if (move.x > newX) {
+                        delay();
+                        super.tick(RIGHT);
+                    }
+                    if (move.x < newX) {
                         delay();
                         super.tick(LEFT);
-                    } else if(currentShape.equals(move.shape)){
+                    }
+                    if (move.x < newX) {
+                        delay();
+                        super.tick(LEFT);
+                    }
+                    if (move.x == newX && currentShape.equals(move.shape)) {
                         delay();
                         super.tick(DROP);
                     }
@@ -50,7 +61,7 @@ public class AITetris extends Tetris implements AI {
 
                 }
             }
-        }else {
+        } else {
             super.tick(direction);
         }
 
@@ -123,6 +134,7 @@ public class AITetris extends Tetris implements AI {
         repaint();
     }
 
+
     @Override
     public void addNewShape() {
 
@@ -132,7 +144,7 @@ public class AITetris extends Tetris implements AI {
         gamingArea.commit();
         currentShape = null;
 
-        shapesList = gamingAreaAnalyse(gamingArea,shapes);
+        shapesList = gamingAreaAnalyse(gamingArea, shapes);
         Shape shape = pickNextShape();
 
         // 顶部居中的位置
@@ -142,10 +154,11 @@ public class AITetris extends Tetris implements AI {
         // 放置新形状
         updateCurrentShape(shape, px, py);
         gamingArea.undo();
-        move = Axis(gamingArea,currentShape);
+        move = Axis(gamingArea, currentShape);
 
         updateCounters();
     }
+
 
     @Override
     public Shape pickNextShape() {
@@ -160,7 +173,7 @@ public class AITetris extends Tetris implements AI {
 //            }
 //        }
         int index = 6;
-        switch (Level){
+        switch (Level) {
             case 1:
                 index = random.nextInt(7);
                 break;
@@ -180,30 +193,34 @@ public class AITetris extends Tetris implements AI {
         return nextShape;
     }
 
+
     /**
      * 权重随机数
+     *
      * @param weight [15,568,4181,2]
      * @return 索引值
      */
-    public static int Xrandom(List<Integer> weight){
-        List<Integer> weightTmp = new ArrayList<>(weight.size()+1);
+    public static int Xrandom(List<Integer> weight) {
+
+        List<Integer> weightTmp = new ArrayList<>(weight.size() + 1);
         weightTmp.add(0);
         Integer sum = 0;
-        for( Integer d : weight ){
+        for (Integer d : weight) {
             sum += d;
             weightTmp.add(sum);
         }
         Random random = new Random();
         int rand = random.nextInt(sum);
         int index = 0;
-        for(int i = weightTmp.size()-1; i >0; i--){
-            if( rand >= weightTmp.get(i)){
+        for (int i = weightTmp.size() - 1; i > 0; i--) {
+            if (rand >= weightTmp.get(i)) {
                 index = i;
                 break;
             }
         }
         return index;
     }
+
 
     public static void main(String[] args) {
         // boilerplate code

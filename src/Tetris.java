@@ -312,7 +312,7 @@ public class Tetris extends JComponent {
     /**
      * 判断当前形状是否已经触及天花板
      */
-    private boolean currentShapeReachedTop() {
+    protected boolean currentShapeReachedTop() {
 
         return gamingArea.getMaxHeight() > gamingArea.getAreaHeight() - TOP_SPACE;
     }

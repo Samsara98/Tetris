@@ -62,7 +62,25 @@ public interface AI {
             for (int col = 0; col < gamingArea.getAreaWidth(); col++) {
                 int row = gamingArea.getColumnHeight(col);
                 int result = gamingArea.place(shape, col, row);
+                if (gamingArea.getMaxHeight() > gamingArea.getAreaHeight() - Tetris.TOP_SPACE) {
+                    result = GamingArea.OUT;
+                }
                 if (result <= GamingArea.ROW_FULL) {
+
+                    gamingArea.undo();
+                    if (gamingArea.place(shape, col, row + 1) == GamingArea.COLLIDED) {
+                        continue;
+                    } else {
+                        gamingArea.undo();
+                    }
+
+                    if (gamingArea.place(shape, col, row + 2) == GamingArea.COLLIDED) {
+                        continue;
+                    } else {
+                        gamingArea.undo();
+                    }
+                    gamingArea.place(shape, col, row);
+
                     double LandingHeight = row + shape.getHeight() / 2.0;
 
                     int RowsEliminated = gamingArea.clearRows();
