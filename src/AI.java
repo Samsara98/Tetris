@@ -1,7 +1,4 @@
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public interface AI {
@@ -54,12 +51,143 @@ public interface AI {
         }
     }
 
-    default List<Shape> gamingAreaAnalyse(GamingArea gamingArea,Shape[] shapes) {
+    default Move Axis(GamingArea gamingArea, Shape shape) {
+
+        int bestCol = 0, bestRow = 0;
+        double bestScore = -999999.9;
+        Shape root = new Shape(shape.getPoints());
+        Shape best = root;
+        int num = 0;
+        while (true) {
+            for (int col = 0; col < gamingArea.getAreaWidth(); col++) {
+                int row = gamingArea.getColumnHeight(col);
+                int result = gamingArea.place(shape, col, row);
+                if (result <= GamingArea.ROW_FULL) {
+                    double LandingHeight = row + shape.getHeight() / 2.0;
+
+                    int RowsEliminated = gamingArea.clearRows();
+                    int RowTransition = RowTransition(gamingArea);
+                    int ColumnTransitions = ColumnTransitions(gamingArea);
+                    int NumberOfHoles = NumberOfHoles(gamingArea);
+                    int WellSums = WellSums(gamingArea);
+
+                    double score = (-4.5 * LandingHeight) +
+                            (3.42 * RowsEliminated) +
+                            (-3.22 * RowTransition) +
+                            (-9.35 * ColumnTransitions) +
+                            (-7.9 * NumberOfHoles) +
+                            (-3.39 * WellSums);
+
+                    if (score > bestScore) {
+                        bestCol = col;
+                        bestRow = row;
+                        bestScore = score;
+                        best = shape;
+                    }
+                }
+                gamingArea.undo();
+                num++;
+            }
+            if (shape.fastRotation().equals(root)) {
+                System.out.println(num);
+                break;
+            } else {
+                shape = shape.fastRotation();
+            }
+        }
+
+        // 返回计算出的bestMove
+        Move bestMove = new Move();
+        bestMove.shape = best;
+        bestMove.x = bestCol;
+        bestMove.y = bestRow;
+        bestMove.score = bestScore;
+        return bestMove;
+    }
+
+    default int WellSums(GamingArea gamingArea) {
+
+        List<Integer> wellList = new ArrayList<>();
+        for (int x = 0; x < gamingArea.getAreaWidth(); x++) {
+            int row = 0;
+            int num = 0;
+            while (row < gamingArea.getAreaHeight()) {
+                if (gamingArea.isFilled(x - 1, row) && gamingArea.isFilled(x + 1, row) && !gamingArea.isFilled(x, row)) {
+                    num++;
+                } else if (num > 0) {
+                    wellList.add(num);
+                    num = 0;
+                }
+                row++;
+            }
+            wellList.add(num);
+        }
+        return wellList.stream().map(this::sumX).mapToInt(x -> x).sum();
+    }
+
+    default int sumX(int num) {
+
+        int sum = 0;
+        while (num > 0) {
+            sum += num;
+            num--;
+        }
+        return sum;
+    }
+
+    default int NumberOfHoles(GamingArea gamingArea) {
+
+        int numberOfHoles = 0;
+        for (int x = 0; x < gamingArea.getAreaWidth(); x++) {
+            boolean start = false;
+            for (int y = gamingArea.getAreaHeight() - 1; y >= 0; y--) {
+                if (gamingArea.isFilled(x, y)) {
+                    start = true;
+                } else if (!gamingArea.isFilled(x, y) && start) {
+                    numberOfHoles++;
+                }
+            }
+        }
+
+        return numberOfHoles;
+    }
+
+
+    default int ColumnTransitions(GamingArea gamingArea) {
+
+        int columnTransitions = 0;
+        for (int x = 0; x < gamingArea.getAreaWidth(); x++) {
+            for (int y = 0; y <= gamingArea.getAreaHeight(); y++) {
+                if (gamingArea.isFilled(x, y - 1) != gamingArea.isFilled(x, y)) {
+                    columnTransitions++;
+                }
+
+            }
+        }
+        return columnTransitions;
+    }
+
+
+    default int RowTransition(GamingArea gamingArea) {
+
+        int rowTransition = 0;
+        for (int y = 0; y < gamingArea.getAreaHeight(); y++) {
+            for (int x = 0; x <= gamingArea.getAreaWidth(); x++) {
+                if (gamingArea.isFilled(x - 1, y) != gamingArea.isFilled(x, y)) {
+                    rowTransition++;
+                }
+            }
+        }
+        return rowTransition;
+    }
+
+
+    default List<Shape> gamingAreaAnalyse(GamingArea gamingArea, Shape[] shapes) {
 
         Map<Shape, Integer> map = new HashMap<>();
         for (int i = 0; i < 7; i++) {
             if (i == 0) {
-                map.put(shapes[i], (gamingArea.getAreaWidth()-1)*2+1);
+                map.put(shapes[i], (gamingArea.getAreaWidth() - 1) * 2 + 1);
             } else {
                 map.put(shapes[i], 0);
             }

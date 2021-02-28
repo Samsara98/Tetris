@@ -13,6 +13,7 @@ public class AITetris extends Tetris implements AI {
     JRadioButton levelButton3;
     int Level = 1;
     private List<Shape> shapesList;
+    Move move;
 
 
     AITetris(int pixels) {
@@ -24,25 +25,29 @@ public class AITetris extends Tetris implements AI {
     @Override
     public void tick(int direction) {
 
-        shapesList = gamingAreaAnalyse(gamingArea,shapes);
         if(AIButton.isSelected()){
             super.tick(direction);
             if (direction == DOWN) {
                 gamingArea.undo();
-                Move move = calculateBestMove(gamingArea, currentShape);
+//                Move move = calculateBestMove(gamingArea, currentShape);
                 if (null != move) {
+                    if (!currentShape.equals(move.shape)){
+                        super.tick(ROTATE);
+                    }
                     if (move.x > newX) {
                         delay();
                         super.tick(RIGHT);
                     } else if (move.x < newX) {
                         delay();
                         super.tick(LEFT);
-                    } else {
+                    } else if(currentShape.equals(move.shape)){
                         delay();
-                        super.tick(direction);
+                        super.tick(DROP);
                     }
-                    currentShape = move.shape;
-                    score = (int) move.score;
+//                    currentX = move.x;
+//                    currentY = move.y;
+//                    currentShape = move.shape;
+
                 }
             }
         }else {
@@ -113,12 +118,34 @@ public class AITetris extends Tetris implements AI {
         updateCounters();
         toggleButtons();
         timeLabel.setText(" ");
-        shapesList = gamingAreaAnalyse(gamingArea,shapes);
         addNewShape();
 
         repaint();
     }
 
+    @Override
+    public void addNewShape() {
+
+        count++;
+        score++;
+
+        gamingArea.commit();
+        currentShape = null;
+
+        shapesList = gamingAreaAnalyse(gamingArea,shapes);
+        Shape shape = pickNextShape();
+
+        // 顶部居中的位置
+        int px = (gamingArea.getAreaWidth() - shape.getWidth()) / 2;
+        int py = gamingArea.getAreaHeight() - shape.getHeight();
+
+        // 放置新形状
+        updateCurrentShape(shape, px, py);
+        gamingArea.undo();
+        move = Axis(gamingArea,currentShape);
+
+        updateCounters();
+    }
 
     @Override
     public Shape pickNextShape() {

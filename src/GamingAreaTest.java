@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
-public class GamingAreaTest {
+public class GamingAreaTest implements AI{
 
     GamingArea gamingArea = new GamingArea(5, 10);
     Shape t;
@@ -42,6 +42,19 @@ public class GamingAreaTest {
         assertEquals(5, gamingArea.getAreaWidth());
         assertEquals(10, gamingArea.getAreaHeight());
         assertTrue(gamingArea.committed);
+        System.out.println(gamingArea);
+        assertEquals(3,WellSums(gamingArea));
+        assertEquals(2,NumberOfHoles(gamingArea));
+        assertEquals(22,RowTransition(gamingArea));
+        assertEquals(14,ColumnTransitions(gamingArea));
+
+        gamingArea.place(t,2,2);
+        gamingArea.commit();
+        gamingArea.place(t2,0,3);
+        System.out.println(gamingArea);
+        assertEquals(6,WellSums(gamingArea));
+        assertEquals(8,NumberOfHoles(gamingArea));
+
     }
 
 
