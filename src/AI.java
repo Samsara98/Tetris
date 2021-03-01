@@ -51,44 +51,65 @@ public interface AI {
         }
     }
 
+    /**
+     * 根据shape和area计算最佳选择
+     *
+     * @param gamingArea
+     * @param shape
+     * @return 包含最佳的shape，x，y
+     */
     default Move Axis(GamingArea gamingArea, Shape shape) {
 
         int bestCol = 0, bestRow = 0;
         double bestScore = -999999.9;
         Shape root = new Shape(shape.getPoints());
         Shape best = root;
-        int num = 0;
         while (true) {
             for (int col = 0; col < gamingArea.getAreaWidth(); col++) {
                 int row = gamingArea.getColumnHeight(col);
                 int result = gamingArea.place(shape, col, row);
+
+                //若放置点超出游戏区域上横线，略过
                 if (gamingArea.getMaxHeight() > gamingArea.getAreaHeight() - Tetris.TOP_SPACE) {
                     result = GamingArea.OUT;
                 }
+
                 if (result <= GamingArea.ROW_FULL) {
 
+                    //若放置点游戏中无法到达，略过
                     gamingArea.undo();
                     if (gamingArea.place(shape, col, row + 1) == GamingArea.COLLIDED) {
+                        gamingArea.undo();
+                        continue;
+                    } else {
+                        gamingArea.undo();
+                    }
+                    if (gamingArea.place(shape, col, row + 2) == GamingArea.COLLIDED) {
+                        gamingArea.undo();
                         continue;
                     } else {
                         gamingArea.undo();
                     }
 
-                    if (gamingArea.place(shape, col, row + 2) == GamingArea.COLLIDED) {
-                        continue;
-                    } else {
-                        gamingArea.undo();
-                    }
                     gamingArea.place(shape, col, row);
 
-                    double LandingHeight = row + shape.getHeight() / 2.0;
-
-                    int RowsEliminated = gamingArea.clearRows();
+                    //EL-Tetris 6大指标
+                    //shape放下后重心高度
+                    int LandingHeight = row + (shape.getHeight() + 1) / 2;
+                    //可消除行数*shape贡献的方块数
+                    int RowsEliminated = gamingArea.clearRows() * gamingArea.getChangeNum();
+                    //横向变化程度
                     int RowTransition = RowTransition(gamingArea);
+                    //纵向变化程度
                     int ColumnTransitions = ColumnTransitions(gamingArea);
+                    //空洞数
                     int NumberOfHoles = NumberOfHoles(gamingArea);
+                    //井深累加和
                     int WellSums = WellSums(gamingArea);
+                    //方块高度最大差值
+                    int range = gamingArea.range();
 
+                    //评估函数
                     double score = (-4.5 * LandingHeight) +
                             (3.42 * RowsEliminated) +
                             (-3.22 * RowTransition) +
@@ -96,7 +117,8 @@ public interface AI {
                             (-7.9 * NumberOfHoles) +
                             (-3.39 * WellSums);
 
-                    if (score > bestScore) {
+
+                    if (score >= bestScore) {
                         bestCol = col;
                         bestRow = row;
                         bestScore = score;
@@ -104,10 +126,8 @@ public interface AI {
                     }
                 }
                 gamingArea.undo();
-                num++;
             }
             if (shape.fastRotation().equals(root)) {
-                System.out.println(num);
                 break;
             } else {
                 shape = shape.fastRotation();
@@ -123,14 +143,19 @@ public interface AI {
         return bestMove;
     }
 
+    /***
+     * 井深累加和，计算所以井的井深，进行累加和，2,3-》（1+2）+（1+2+3）；
+     * @param gamingArea
+     * @return
+     */
     default int WellSums(GamingArea gamingArea) {
 
         List<Integer> wellList = new ArrayList<>();
-        for (int x = 0; x < gamingArea.getAreaWidth(); x++) {
+        for (int x = 1; x < gamingArea.getAreaWidth() - 1; x++) {
             int row = 0;
             int num = 0;
             while (row < gamingArea.getAreaHeight()) {
-                if (gamingArea.isFilled(x - 1, row) && gamingArea.isFilled(x + 1, row) && !gamingArea.isFilled(x, row)) {
+                if (!gamingArea.isFilled(x, row) && gamingArea.isFilled(x - 1, row) && gamingArea.isFilled(x + 1, row)) {
                     num++;
                 } else if (num > 0) {
                     wellList.add(num);
@@ -143,6 +168,12 @@ public interface AI {
         return wellList.stream().map(this::sumX).mapToInt(x -> x).sum();
     }
 
+    /**
+     * 累加
+     *
+     * @param num
+     * @return 1+2+3+...num；
+     */
     default int sumX(int num) {
 
         int sum = 0;
@@ -153,6 +184,12 @@ public interface AI {
         return sum;
     }
 
+    /**
+     * 空洞数，每列顶部被砖块封住，则下部空位为空洞
+     *
+     * @param gamingArea
+     * @return
+     */
     default int NumberOfHoles(GamingArea gamingArea) {
 
         int numberOfHoles = 0;
@@ -171,6 +208,12 @@ public interface AI {
     }
 
 
+    /**
+     * 纵向变化程度，区域外视为有砖块，有-》无，无-》有，都算变化一次
+     *
+     * @param gamingArea
+     * @return
+     */
     default int ColumnTransitions(GamingArea gamingArea) {
 
         int columnTransitions = 0;
@@ -185,7 +228,12 @@ public interface AI {
         return columnTransitions;
     }
 
-
+    /**
+     * 横向变化程度，区域外视为有砖块，有-》无，无-》有，都算变化一次
+     *
+     * @param gamingArea
+     * @return
+     */
     default int RowTransition(GamingArea gamingArea) {
 
         int rowTransition = 0;
@@ -199,7 +247,13 @@ public interface AI {
         return rowTransition;
     }
 
-
+    /**
+     * 游戏区域分析，计算当前情况下最有利的shape，降低其随机权重，提升难度；
+     *
+     * @param gamingArea
+     * @param shapes
+     * @return 将7种shape按最不利->最有利排序后返回
+     */
     default List<Shape> gamingAreaAnalyse(GamingArea gamingArea, Shape[] shapes) {
 
         Map<Shape, Integer> map = new HashMap<>();

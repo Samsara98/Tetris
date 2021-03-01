@@ -11,21 +11,27 @@ public class GamingArea {
     private boolean[][] board;
     private boolean[][] cache;
     boolean committed;
+    private int currentY;
+    private Shape currentShape;
+    private int changeNum;
 
 
     public GamingArea(int width, int height) {
-
+        //board：添加shape后的游戏区域，cache：已放置好shape的游戏区域
         this.width = Math.abs(width);
         this.height = Math.abs(height);
         board = new boolean[this.width][this.height];
         cache = new boolean[this.width][this.height];
         arrayCopy(cache, board);
         committed = true;
-
-        // TODO
     }
 
 
+    /**
+     * 二维数组复制
+     * @param cache
+     * @param board
+     */
     private void arrayCopy(boolean[][] cache, boolean[][] board) {
 
         for (int i = 0; i < width; i++) {
@@ -84,14 +90,7 @@ public class GamingArea {
             return 0;
         }
 
-        int row = height;
-//        for (int x = 0; x < width; x++) {
-//            for (int y = 0; y < height; y++) {
-//                if (board[x][y] != cache[x][y] && y < row) {
-//                    row = y;
-//                }
-//            }
-//        }
+        int row = currentY;
 
         int maxHeight = 0;
 
@@ -104,7 +103,7 @@ public class GamingArea {
                 }
             }
         }
-        if(maxHeight + shape.getHeight()-1 >= height){
+        if (maxHeight + shape.getHeight() - 1 >= height) {
             return maxHeight;
         }
 
@@ -144,6 +143,20 @@ public class GamingArea {
     }
 
 
+    public int getPointsNum() {
+
+        int num = 0;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (isFilled(x, y)) {
+                    num++;
+                }
+            }
+        }
+        return num;
+    }
+
+
     /**
      * 某一行已经填上方块的个数
      */
@@ -172,6 +185,24 @@ public class GamingArea {
         if (col >= width || row >= height || col < 0 || row < 0)
             return true;
         return board[col][row];
+    }
+
+
+    /**
+     * 游戏区域方块高度的最大差值
+     * @return
+     */
+    public int range() {
+
+        int[] gaps = new int[width];
+        for (int x = 0; x < width; x++) {
+            gaps[x] = getColumnHeight(x);
+        }
+        int max = Arrays.stream(gaps).max().getAsInt();
+        int min = Arrays.stream(gaps).min().getAsInt();
+        int maxGap = max - min;
+
+        return maxGap;
     }
 
 
@@ -216,8 +247,11 @@ public class GamingArea {
             }
         }
 
+        currentY = row;
+        currentShape = shape;
+
         for (int y = 0; y < shape.getHeight(); y++) {
-            if (getFilledBlockCount(y+row) == width) {
+            if (getFilledBlockCount(y + row) == width) {
                 return ROW_FULL;
             }
         }
@@ -238,6 +272,11 @@ public class GamingArea {
         for (int y = 0; y < height; y++) {
             if (getFilledBlockCount(y) == width) {
                 rowsCleared += 1;
+                for (Point point :currentShape.getPoints()) {
+                    if(currentY + point.y ==y){
+                        changeNum ++;
+                    }
+                }
             } else {
                 for (int x = 0; x < width; x++) {
                     board2[x][row] = board[x][y];
@@ -249,6 +288,17 @@ public class GamingArea {
         return rowsCleared;
     }
 
+
+    /**
+     * 消除行时shape贡献的方块数
+     * @return
+     */
+    public int getChangeNum(){
+
+        int num = changeNum;
+        changeNum = 0;
+        return num;
+    }
 
     /**
      * 撤销操作，恢复到放置前的状态

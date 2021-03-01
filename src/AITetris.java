@@ -25,6 +25,7 @@ public class AITetris extends Tetris implements AI {
     @Override
     public void tick(int direction) {
 
+        //根据AI按键情况进行tick
         if (AIButton.isSelected()) {
             super.tick(direction);
             if (direction == DOWN) {
@@ -32,33 +33,23 @@ public class AITetris extends Tetris implements AI {
 //                Move move = calculateBestMove(gamingArea, currentShape);
                 if (null != move) {
                     if (!currentShape.equals(move.shape)) {
-                        delay();
+                        super.tick(ROTATE);
+                    }
+                    if (!currentShape.equals(move.shape)) {
                         super.tick(ROTATE);
                     }
                     if (move.x > newX) {
-                        delay();
                         super.tick(RIGHT);
+                    }
+                    if (move.x < newX) {
+                        super.tick(LEFT);
                     }
                     if (move.x > newX) {
-                        delay();
                         super.tick(RIGHT);
                     }
                     if (move.x < newX) {
-                        delay();
                         super.tick(LEFT);
                     }
-                    if (move.x < newX) {
-                        delay();
-                        super.tick(LEFT);
-                    }
-                    if (move.x == newX && currentShape.equals(move.shape)) {
-                        delay();
-                        super.tick(DROP);
-                    }
-//                    currentX = move.x;
-//                    currentY = move.y;
-//                    currentShape = move.shape;
-
                 }
             }
         } else {
@@ -68,6 +59,9 @@ public class AITetris extends Tetris implements AI {
     }
 
 
+    /**
+     * 延迟
+     */
     private void delay() {
 
         try {
@@ -78,11 +72,13 @@ public class AITetris extends Tetris implements AI {
     }
 
 
+    /**
+     * 添加debug按钮、难度选择chexkbox、和AI按钮
+     */
     @Override
     public JPanel createControlPanel() {
 
         JPanel panel = super.createControlPanel();
-        random = new Random(); // 用于让形状随机出现
         debugButton = new JCheckBox("debug");
         panel.add(debugButton);
 
@@ -117,10 +113,10 @@ public class AITetris extends Tetris implements AI {
         count = 0;
         score = 0;
         gameOn = true;
+        //开始游戏时根据debug按钮情况设置seed
+        random = new Random(); // 用于让形状随机出现
         if (debugButton.isSelected()) {
             random.setSeed(0);
-        } else {
-            random = new Random();
         }
         startTime = System.currentTimeMillis();
         timer.start();
@@ -138,6 +134,7 @@ public class AITetris extends Tetris implements AI {
     @Override
     public void addNewShape() {
 
+
         count++;
         score++;
 
@@ -154,6 +151,7 @@ public class AITetris extends Tetris implements AI {
         // 放置新形状
         updateCurrentShape(shape, px, py);
         gamingArea.undo();
+        //每次添加形状后AI进行计算得到最佳落点
         move = Axis(gamingArea, currentShape);
 
         updateCounters();
@@ -163,15 +161,7 @@ public class AITetris extends Tetris implements AI {
     @Override
     public Shape pickNextShape() {
 
-//        int maxScore = 0;
-//        Shape bad = new Shape("0 0");
-//        for (Shape shape : shapes) {
-//            Move move = calculateBestMove(gamingArea, shape);
-//            if((int)move.score > maxScore){
-//                maxScore = Math.max(maxScore,(int)move.score);
-//                bad = move.shape;
-//            }
-//        }
+        //根据难度选择checkbox，以不同权重进行随机选择shape
         int index = 6;
         switch (Level) {
             case 1:
@@ -196,7 +186,6 @@ public class AITetris extends Tetris implements AI {
 
     /**
      * 权重随机数
-     *
      * @param weight [15,568,4181,2]
      * @return 索引值
      */
@@ -209,8 +198,8 @@ public class AITetris extends Tetris implements AI {
             sum += d;
             weightTmp.add(sum);
         }
-        Random random = new Random();
-        int rand = random.nextInt(sum);
+        Random random2 = new Random();
+        int rand = random2.nextInt(sum);
         int index = 0;
         for (int i = weightTmp.size() - 1; i > 0; i--) {
             if (rand >= weightTmp.get(i)) {
