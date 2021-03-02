@@ -3,9 +3,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
-public class GamingAreaTest implements AI{
+public class GamingAreaTest implements AI {
 
     GamingArea gamingArea = new GamingArea(5, 10);
     Shape t;
@@ -13,6 +17,7 @@ public class GamingAreaTest implements AI{
 
     @Rule
     public Timeout timeout = Timeout.millis(100);
+
 
     //运行所有测试前都将运行@Before修饰的方法
     @Before
@@ -41,36 +46,36 @@ public class GamingAreaTest implements AI{
         assertEquals(10, gamingArea.getAreaHeight());
         assertTrue(gamingArea.committed);
 
-        assertEquals(2,NumberOfHoles(gamingArea));
-        assertEquals(22,RowTransition(gamingArea));
-        assertEquals(14,ColumnTransitions(gamingArea));
+        assertEquals(2, NumberOfHoles(gamingArea));
+        assertEquals(22, RowTransition(gamingArea));
+        assertEquals(14, ColumnTransitions(gamingArea));
 
-        gamingArea.place(t,2,2);
+        gamingArea.place(t, 2, 2);
         gamingArea.commit();
-        gamingArea.place(t2,0,3);
-        assertEquals(8,NumberOfHoles(gamingArea));
-        assertEquals(2,gamingArea.range());
+        gamingArea.place(t2, 0, 3);
+        assertEquals(8, NumberOfHoles(gamingArea));
+        assertEquals(2, gamingArea.range());
 
-        assertEquals(15,gamingArea.getPointsNum());
+        assertEquals(15, gamingArea.getPointsNum());
 
     }
 
+
     @Test
-    public void test(){
+    public void test() {
+
         System.out.println(gamingArea);
-        assertEquals(3,WellSums(gamingArea));
-        gamingArea.place(t,1,2);
+        assertEquals(3, WellSums(gamingArea));
+        gamingArea.place(t, 1, 2);
         gamingArea.commit();
-        gamingArea.place(t2,0,4);
+        gamingArea.place(t2, 0, 4);
         gamingArea.commit();
 
         Shape a = new Shape("0 0");
-        gamingArea.place(a,1,1);
+        gamingArea.place(a, 1, 1);
         gamingArea.commit();
-        gamingArea.place(a,1,2);
-        System.out.println(gamingArea);
-        assertEquals(10,WellSums(gamingArea));
-
+        gamingArea.place(a, 1, 2);
+        assertEquals(10, WellSums(gamingArea));
     }
 
 
@@ -293,7 +298,6 @@ public class GamingAreaTest implements AI{
 
 
     }
-
 
 
     @Test

@@ -110,12 +110,12 @@ public interface AI {
                     int range = gamingArea.range();
 
                     //评估函数
-                    double score = (-4.5 * LandingHeight) +
-                            (3.42 * RowsEliminated) +
-                            (-3.22 * RowTransition) +
-                            (-9.35 * ColumnTransitions) +
-                            (-7.9 * NumberOfHoles) +
-                            (-3.39 * WellSums);
+                    double score = (-45 * LandingHeight) +
+                            (34 * RowsEliminated) +
+                            (-32 * RowTransition) +
+                            (-94 * ColumnTransitions) +
+                            (-79 * NumberOfHoles) +
+                            (-34 * WellSums);
 
 
                     if (score >= bestScore) {
@@ -151,7 +151,7 @@ public interface AI {
     default int WellSums(GamingArea gamingArea) {
 
         List<Integer> wellList = new ArrayList<>();
-        for (int x = 1; x < gamingArea.getAreaWidth() - 1; x++) {
+        for (int x = 0; x < gamingArea.getAreaWidth() ; x++) {
             int row = 0;
             int num = 0;
             while (row < gamingArea.getAreaHeight()) {
