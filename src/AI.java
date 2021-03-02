@@ -110,11 +110,11 @@ public interface AI {
                     int range = gamingArea.range();
 
                     //评估函数
-                    double score = (-45 * LandingHeight) +
+                    double score = (-45 * LandingHeight*2) +
                             (34 * RowsEliminated) +
                             (-32 * RowTransition) +
                             (-94 * ColumnTransitions) +
-                            (-79 * NumberOfHoles) +
+                            (-79 * NumberOfHoles*2) +
                             (-34 * WellSums);
 
 

@@ -177,6 +177,9 @@ public class AITetris extends Tetris implements AI {
                 break;
         }
         Shape nextShape = shapesList.get(index);
+        if(Level==1){
+            nextShape = shapes[index];
+        }
         for (int i = 0; i < (int) (random.nextDouble() * 4); i++) {
             nextShape = nextShape.fastRotation();
         }
