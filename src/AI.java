@@ -76,26 +76,26 @@ public interface AI {
 
                 if (result <= GamingArea.ROW_FULL) {
 
-                    //若放置点游戏中无法到达，略过
-                    gamingArea.undo();
-                    if (gamingArea.place(shape, col, row + 1) == GamingArea.COLLIDED) {
-                        gamingArea.undo();
-                        continue;
-                    } else {
-                        gamingArea.undo();
-                    }
-                    if (gamingArea.place(shape, col, row + 2) == GamingArea.COLLIDED) {
-                        gamingArea.undo();
-                        continue;
-                    } else {
-                        gamingArea.undo();
-                    }
-
-                    gamingArea.place(shape, col, row);
+//                    //若放置点游戏中无法到达，略过
+//                    gamingArea.undo();
+//                    if (gamingArea.place(shape, col, row + 1) == GamingArea.COLLIDED) {
+//                        gamingArea.undo();
+//                        continue;
+//                    } else {
+//                        gamingArea.undo();
+//                    }
+//                    if (gamingArea.place(shape, col, row + 2) == GamingArea.COLLIDED) {
+//                        gamingArea.undo();
+//                        continue;
+//                    } else {
+//                        gamingArea.undo();
+//                    }
+//
+//                    gamingArea.place(shape, col, row);
 
                     //EL-Tetris 6大指标
                     //shape放下后重心高度
-                    int LandingHeight = row + (shape.getHeight() + 1) / 2;
+                    int LandingHeight = row + shape.getHeight()/ 2;
                     //可消除行数*shape贡献的方块数
                     int RowsEliminated = gamingArea.clearRows() * gamingArea.getChangeNum();
                     //横向变化程度
@@ -110,11 +110,11 @@ public interface AI {
                     int range = gamingArea.range();
 
                     //评估函数
-                    double score = (-45 * LandingHeight*2) +
+                    double score = (-45 * LandingHeight) +
                             (34 * RowsEliminated) +
                             (-32 * RowTransition) +
                             (-94 * ColumnTransitions) +
-                            (-79 * NumberOfHoles*2) +
+                            (-79 * NumberOfHoles) +
                             (-34 * WellSums);
 
 
